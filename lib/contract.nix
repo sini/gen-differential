@@ -1,11 +1,17 @@
 # THE CONTRACT — the four records, each with a required-and-total field set.
 #
-# ★ EVERY CONSTRUCT NAME IN THIS FILE IS A PLACEHOLDER UNDER A STANDING QUARANTINE. `subject`,
-# `reference`, `candidate`, `seam`, `claim`, `observables`, `comparison` and the divergence
-# register are named by the specification of record and NOT by a verified primary. McKeeman 1998
-# grounds the MECHANISM (two comparable systems, one input, divergence as the signal) and the
-# reference/candidate ASYMMETRY, but grounds none of these identifiers; they resolve at their own
-# primaries or as ruled namings, and until then a rename is expected rather than surprising.
+# ★ THE CONSTRUCT NAMES HERE ARE RULED NAMINGS RATHER THAN PLACEHOLDERS — with one exception, named
+# below rather than left to be inferred. `subject`, `reference`, `candidate` and `seam` stand as
+# they were; `claim`, `observables` and `comparison` are the ruled spellings, the first two having
+# replaced `proposition` and `projections`. None of them is grounded in a verified primary and none
+# pretends to be: McKeeman 1998 grounds the MECHANISM (two comparable systems, one input, divergence
+# as the signal) and the reference/candidate ASYMMETRY, and grounds no identifier in this file. A
+# ruled naming is a decision and not a derivation, which is why it is recorded as one.
+#
+# ★★ THE DIVERGENCE REGISTER IS THE EXCEPTION, AND IT REMAINS UNDER THE QUARANTINE. No theory ground
+# is offered for that term here and it owes one, so a rename there is expected rather than
+# surprising. The exception is stated because a discharge covering everything except one term nobody
+# names does not read as a discharge at all.
 #
 # ★★ WHY THE FIELDS ARE REQUIRED RATHER THAN DEFAULTED. A missing declaration is a design choice,
 # and a defaulted one makes that choice silently. The predecessor apparatus this library replaces

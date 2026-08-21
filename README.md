@@ -355,11 +355,13 @@ fixtures. The paper's own counterweight — it applies the term to "ad hoc diffe
 generated-input arm, with test reduction as its natural companion, is recorded future work and is the
 condition under which the narrowing retires.
 
-**Construct names are placeholders under a standing quarantine.** `subject`, `seam`, `claim`,
-`observables` and the divergence register are named by specification and not by a verified primary;
-McKeeman grounds the mechanism and the reference/candidate asymmetry, and grounds none of those
-identifiers. They resolve at their own primaries or as ruled namings, and until then a rename is
-expected rather than surprising.
+**Construct names are ruled namings, with one exception.** `subject`, `seam`, `claim` and
+`observables` are named by decision rather than derived from a verified primary — McKeeman grounds
+the mechanism and the reference/candidate asymmetry, and grounds none of those identifiers. A ruled
+naming is a decision and not a derivation, and is recorded as one.
+
+**The divergence register is the exception, and stays under the quarantine.** No theory ground is
+offered for that term, it owes one, and a rename there is expected rather than surprising.
 
 ## License
 
