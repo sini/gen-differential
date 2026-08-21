@@ -37,7 +37,10 @@ let
   oracles = import ./oracles.nix { inherit compare diff; };
 in
 {
-  # The five concerns, reachable as namespaces.
+  # The seven concerns, reachable as namespaces: every library source except `default.nix`, which is
+  # this file, and `no-go.nix`, which is a finding rather than machinery. Stated as a derivation
+  # rather than a bare number so the count can be re-checked against the source roster
+  # `ci/tests/purity.nix` already asserts, instead of being taken on trust and rotting.
   inherit
     diff
     contract
