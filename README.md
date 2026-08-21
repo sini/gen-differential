@@ -6,8 +6,8 @@
 > — W. M. McKeeman, *Differential Testing for Software*, Digital Technical Journal **10**(1), 1998, pp. 100–107
 
 `gen-differential` is the machinery for asserting that two implementations agree: a parameterized
-**subject**, a **seam-routed identity control**, a required **claim** on every comparison, a
-**projection set** per fixture, a **divergence register** that asserts rather than mutes, and the
+**subject**, a **seam-routed identity control**, a required **claim** on every comparison, an
+**observable set** per fixture, a **divergence register** that asserts rather than mutes, and the
 **oracles** that keep a green from being vacuous.
 
 It is *not* an instantiation. Both arms of every comparison arrive as arguments, so a green here says
@@ -19,7 +19,7 @@ the machinery works — never that any particular design agrees with any particu
 - [The contract](#the-contract)
 - [Quick start](#quick-start)
 - [Comparison kinds](#comparison-kinds)
-- [Projections](#projections)
+- [Observables](#observables)
 - [The divergence register](#the-divergence-register)
 - [The oracles](#the-oracles)
 - [The corpus](#the-corpus)
@@ -100,7 +100,7 @@ declined.
 ```nix
 fixture = {
   modules;                    # REQUIRED — a FUNCTION of the arm's vocabulary
-  projections;                # REQUIRED, total, a SET — never defaulted
+  observables;                # REQUIRED, total, a SET — never defaulted
   comparison;                 # REQUIRED — one of the comparison kinds
   specialArgs ? { };
   class ? null;
@@ -160,14 +160,14 @@ in
   suite.green            # the verdict
 ```
 
-Every cell in `suite.cells.<fixture>.<projection>` carries both `identity` and `candidate` claims.
+Every cell in `suite.cells.<fixture>.<observable>` carries both `identity` and `candidate` claims.
 
 ## Comparison kinds
 
 | Kind      | Asserts         | Notes                                                                  |
 | --------- | --------------- | ---------------------------------------------------------------------- |
-| `value`   | **equivalence** | Structural equality of the projection, with first-divergence location. |
-| `drvPath` | **identity**    | Derivation-path identity of the projection.                            |
+| `value`   | **equivalence** | Structural equality of the observable, with first-divergence location. |
+| `drvPath` | **identity**    | Derivation-path identity of the observable.                            |
 | `throws`  | **refusal**     | Both arms must decline.                                                |
 
 **`drvPath` identity is sufficient, never necessary.** Byte identity is asserted only where it is
@@ -181,31 +181,31 @@ that asserted identity cannot be read as having asserted equivalence.
 And it asserts **mutual refusal, not a shared cause**: two arms that decline for entirely unrelated
 reasons satisfy it, because a refusal reading yields a boolean and nothing else.
 
-**The three kinds are not a closed set**, for the same reason the projection axis is open.
+**The three kinds are not a closed set**, for the same reason the observable axis is open.
 
-## Projections
+## Observables
 
-A projection is the function from an evaluation result to the compared value. It is **required and
-total** — never defaulted to the configuration tree — and every claim names which projection it was
+An observable is the function from an evaluation result to the compared value. It is **required and
+total** — never defaulted to the configuration tree — and every claim names which observable it was
 measured at.
 
 The axis takes more than two members, and that is measured rather than assumed: a completed probe in
 this project compared at five surfaces and explicitly demoted the derivation path as terminal rather
-than the bar. So a fixture carries a projection **set**.
+than the bar. So a fixture carries an observable **set**.
 
 ```nix
-gd.projections.at [ "config" "things" ]   # an attribute-path accessor; refuses at a missing component
-gd.projections.config                     # the configuration tree
-gd.projections.nixosToplevel              # the NixOS system derivation — a NAMED export, never a default
-gd.projections.withOptionShape { ... }    # the declared option surface, which a value comparison cannot see
+gd.observables.at [ "config" "things" ]   # an attribute-path accessor; refuses at a missing component
+gd.observables.config                     # the configuration tree
+gd.observables.nixosToplevel              # the NixOS system derivation — a NAMED export, never a default
+gd.observables.withOptionShape { ... }    # the declared option surface, which a value comparison cannot see
 ```
 
 `nixosToplevel` is exported by name precisely because it is a domain coordinate rather than a general
 one — that accessor buried inside a comparison was the one place the source apparatus's domain leaked
 into its otherwise domain-free half.
 
-**The first-divergence coordinate is relative to the projection**, not to the evaluation result: the
-walk starts where the projection ended.
+**The first-divergence coordinate is relative to the observable**, not to the evaluation result: the
+walk starts where the observable ended.
 
 ## The divergence register
 
@@ -242,7 +242,7 @@ where the vacuity will actually appear.
 | Oracle                                                     | Refuses                                                               |
 | ---------------------------------------------------------- | --------------------------------------------------------------------- |
 | `floor { suite; teeth; }`                                  | The three coverage-floor keys, asserted individually and in a rollup. |
-| `mutationTeeth { arm; fixture; projectionName; perturb; }` | A comparison that is measuring a constant.                            |
+| `mutationTeeth { arm; fixture; observableName; perturb; }` | A comparison that is measuring a constant.                            |
 | `inputConsumption { inputs; perturb; cells; }`             | A declared input **no cell reads at all**.                            |
 | `distinctSubjects [ … ]`                                   | One subject, or two sharing a seam.                                   |
 | `explain claim`                                            | A red that cannot be attributed without inside knowledge.             |
@@ -356,7 +356,7 @@ generated-input arm, with test reduction as its natural companion, is recorded f
 condition under which the narrowing retires.
 
 **Construct names are placeholders under a standing quarantine.** `subject`, `seam`, `claim`,
-`projections` and the divergence register are named by specification and not by a verified primary;
+`observables` and the divergence register are named by specification and not by a verified primary;
 McKeeman grounds the mechanism and the reference/candidate asymmetry, and grounds none of those
 identifiers. They resolve at their own primaries or as ruled namings, and until then a rename is
 expected rather than surprising.

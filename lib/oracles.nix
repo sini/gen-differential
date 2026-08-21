@@ -29,12 +29,12 @@ let
     let
       anti = c: if c.comparison == "throws" then c.bothRefused == true else c.bothEvaluated == true;
       keys = {
-        # Every cell's projection agrees with its reference, or diverges exactly as ruled.
+        # Every cell's observable agrees with its reference, or diverges exactly as ruled.
         "all-identical" = builtins.all (c: c.unregistered == [ ] && c.missing == [ ]) suite.allClaims;
         # THE ANTI-VACUITY KEY: both stacks genuinely produced something. Two arms that agree
         # through a shared refusal have not been shown to agree about anything else.
         "both-evaluated" = suite.allClaims != [ ] && builtins.all anti suite.allClaims;
-        # THE TEETH: perturbing an input moves the compared projection. Without it a comparison can
+        # THE TEETH: perturbing an input moves the compared observable. Without it a comparison can
         # be measuring a constant.
         "teeth-mutation-diverges" = teeth;
       };
@@ -46,7 +46,7 @@ let
 
   # ── THE TEETH ────────────────────────────────────────────────────────────────────────────────
   #
-  # Perturb the fixture, evaluate through ONE arm, and require the compared projection to move. The
+  # Perturb the fixture, evaluate through ONE arm, and require the compared observable to move. The
   # probe reading is used rather than the parity walk, because the question is "did this change?"
   # and two refusals are an unchanged answer to it — where for a parity question they are not an
   # answer at all.
@@ -54,19 +54,19 @@ let
     {
       arm,
       fixture,
-      projectionName,
+      observableName,
       perturb,
     }:
     if !(builtins.isFunction perturb) then
       refuse "teeth.perturb" "the teeth perturb a fixture, so `perturb` maps a fixture to a fixture"
     else
       let
-        projection = fixture.projections.${projectionName};
-        base = projection (compare.run arm fixture);
-        mutated = projection (compare.run arm (perturb fixture));
+        observable = fixture.observables.${observableName};
+        base = observable (compare.run arm fixture);
+        mutated = observable (compare.run arm (perturb fixture));
       in
       {
-        inherit projectionName;
+        inherit observableName;
         arm = arm.name;
         moved = !(diff.probeEq base mutated);
         baseReading = diff.probe base;
@@ -157,7 +157,7 @@ let
     c:
     "${
       if c.green then "green" else "RED"
-    }: ${c.claim} | arms ${c.arms} (${c.referenceArm} vs ${c.candidateArm}) | ${c.comparison}/${c.assertion} at projection ${c.projectionName}"
+    }: ${c.claim} | arms ${c.arms} (${c.referenceArm} vs ${c.candidateArm}) | ${c.comparison}/${c.assertion} at observable ${c.observableName}"
     + (if c.rung == null then "" else " | rung ${builtins.toString c.rung}")
     + (
       if c.firstDivergence == null then

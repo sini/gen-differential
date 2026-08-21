@@ -37,8 +37,8 @@ let
 
   # ── THE KINDS ────────────────────────────────────────────────────────────────────────────────
   #
-  # ★ THE THREE ARE NOT A CLOSED SET, for the reason the projection axis is open: a comparison kind
-  # is a predicate over projections, and the surfaces worth comparing are not enumerable from here.
+  # ★ THE THREE ARE NOT A CLOSED SET, for the reason the observable axis is open: a comparison kind
+  # is a predicate over observables, and the surfaces worth comparing are not enumerable from here.
   #
   # ★★ `drvPath` IDENTITY IS SUFFICIENT, NEVER NECESSARY, and the kind says so rather than a
   # footnote saying it. Byte identity is asserted only where it is free; end-result EQUIVALENCE is
@@ -49,17 +49,17 @@ let
   kinds = {
     value = {
       assertion = "equivalence";
-      # Structural equality of the projection, with first-divergence location.
+      # Structural equality of the observable, with first-divergence location.
       compare =
         {
           a,
           b,
-          projection,
+          observable,
         }:
         let
           d = diff.diff {
-            a = projection a;
-            b = projection b;
+            a = observable a;
+            b = observable b;
           };
         in
         {
@@ -72,28 +72,28 @@ let
       assertion = "identity";
       # ★ THE ABSENCE IS CONVERTED TO A THROW BEFORE IT IS READ, AND THAT IS NOT DEFENSIVENESS.
       # `tryEval` catches thrown errors and failed assertions and NOT a missing-attribute error, so
-      # selecting `.drvPath` off a projection that has none takes the whole gate down instead of
+      # selecting `.drvPath` off an observable that has none takes the whole gate down instead of
       # failing one cell — the exact class this ecosystem keeps a second test output for. Measured
-      # here: a seeded run whose projection stopped yielding a derivation-shaped value crashed the
+      # here: a seeded run whose observable stopped yielding a derivation-shaped value crashed the
       # suite rather than reddening the cell. Testing presence first turns an uncatchable abort into
       # a catchable refusal, so the cell can carry its own failure.
       compare =
         {
           a,
           b,
-          projection,
+          observable,
         }:
         let
           read =
             arm:
             builtins.tryEval (
               let
-                v = projection arm;
+                v = observable arm;
               in
               if builtins.isAttrs v && v ? drvPath then
                 v.drvPath
               else
-                throw "gen-differential: the `drvPath' comparison's projection yielded no `drvPath' attribute"
+                throw "gen-differential: the `drvPath' comparison's observable yielded no `drvPath' attribute"
             );
           ea = read a;
           eb = read b;
@@ -129,7 +129,7 @@ let
       #
       # ★★ AND IT ASSERTS MUTUAL REFUSAL, NOT A SHARED CAUSE. A refusal reading yields a boolean and
       # nothing else, so two arms that decline for entirely unrelated reasons satisfy this kind.
-      # Measured in this repository's own suite: an arm perturbed so that the projected attribute no
+      # Measured in this repository's own suite: an arm perturbed so that the observed attribute no
       # longer exists still refuses, and the cell stays green — correctly, because "both decline" is
       # the whole of what is claimed. Asserting that the two REFUSED THE SAME WAY needs a comparison
       # of the refusals, which this reading cannot supply.
@@ -137,11 +137,11 @@ let
         {
           a,
           b,
-          projection,
+          observable,
         }:
         let
-          ra = diff.expectThrow (projection a);
-          rb = diff.expectThrow (projection b);
+          ra = diff.expectThrow (observable a);
+          rb = diff.expectThrow (observable b);
           both = ra && rb;
         in
         {
@@ -166,7 +166,7 @@ let
   # ── THE CLAIM ────────────────────────────────────────────────────────────────────────────────
   #
   # Every field a red needs to be readable WITHOUT an operator who already knows what was seeded:
-  # which claim, which pair of arms, which projection, what was asserted, and where the two first
+  # which claim, which pair of arms, which observable, what was asserted, and where the two first
   # parted company.
   #
   # The record is a claim and it CARRIES the claim it belongs to, so the field shadows this
@@ -178,16 +178,16 @@ let
       claim,
       arms,
       fixture,
-      projectionName,
+      observableName,
       a,
       b,
       register ? [ ],
     }:
     let
       kind = kinds.${fixture.comparison};
-      projection = fixture.projections.${projectionName};
+      observable = fixture.observables.${observableName};
       raw = kind.compare {
-        inherit projection;
+        inherit observable;
         a = run a fixture;
         b = run b fixture;
       };
@@ -198,7 +198,7 @@ let
     in
     raw
     // {
-      inherit claim arms projectionName;
+      inherit claim arms observableName;
       inherit (fixture) comparison rung;
       inherit (kind) assertion;
       referenceArm = a.name;
@@ -239,11 +239,11 @@ rec {
         cellsFor =
           fixture:
           builtins.mapAttrs (
-            projectionName: _:
+            observableName: _:
             let
               common = {
                 inherit (subject) claim;
-                inherit fixture projectionName;
+                inherit fixture observableName;
                 a = arms.reference;
               };
             in
@@ -265,7 +265,7 @@ rec {
                 }
               );
             }
-          ) fixture.projections;
+          ) fixture.observables;
 
         cells = builtins.mapAttrs (_: cellsFor) fixtures;
 

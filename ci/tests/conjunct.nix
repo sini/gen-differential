@@ -75,7 +75,7 @@ let
   # puts `__absent` on the reference side, a reference-only key puts it on the other.
   keyFixture = gd.mkFixture {
     comparison = "value";
-    projections.set = gd.projections.at [
+    observables.set = gd.observables.at [
       "config"
       "set"
     ];
@@ -196,10 +196,10 @@ in
     # extra definition is on the candidate side in P1 and on the reference side in P2, and the
     # first-divergence record says so without any outside knowledge.
     #
-    # ★★ AND THE COORDINATE IS RELATIVE TO THE PROJECTION, NOT TO THE EVALUATION RESULT. The path is
-    # `[ "length" ]` rather than `[ "thing" "length" ]` because the projection already selected the
-    # list, and the walk starts where the projection ended. That is the only coherent reading — the
-    # claim names its projection, so the coordinate has to be inside it — but it is stated here
+    # ★★ AND THE COORDINATE IS RELATIVE TO THE OBSERVABLE, NOT TO THE EVALUATION RESULT. The path is
+    # `[ "length" ]` rather than `[ "thing" "length" ]` because the observable already selected the
+    # list, and the walk starts where the observable ended. That is the only coherent reading — the
+    # claim names its observable, so the coordinate has to be inside it — but it is stated here
     # because the other reading is the one someone will assume.
     test-the-two-reds-mirror-each-other-at-the-first-divergence = {
       expr = [

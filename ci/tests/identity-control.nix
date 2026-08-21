@@ -23,7 +23,7 @@ let
       builtins.attrValues suite.cells
     );
 
-  # A flat `<fixture>.<projection>` → green reading, which is what makes a seeded partition
+  # A flat `<fixture>.<observable>` → green reading, which is what makes a seeded partition
   # assertable as a VALUE rather than as a count. A count would hide which cell moved.
   greenMap =
     which: suite: builtins.mapAttrs (_: ps: builtins.mapAttrs (_: a: a.${which}.green) ps) suite.cells;
@@ -82,7 +82,7 @@ in
 {
   flake.tests.identity-control = {
     # The control passes: routing the reference's own body through the candidate's seam changes
-    # nothing any fixture can see, at any projection.
+    # nothing any fixture can see, at any observable.
     test-identity-arm-agrees-with-the-reference-on-every-fixture = {
       expr = builtins.all (c: c.green) (claimsOf "identity" arms.suite);
       expected = true;
@@ -104,7 +104,7 @@ in
     # ★ `priorityFold` SURVIVES IT, AND THAT IS THE FIXTURE BEING CORRECT RATHER THAN THE SEED
     # BEING WEAK. Its last module is a normal-priority ordered definition, and the option is taken
     # outright by a `mkForce` in a higher class — so the dropped definition was already discarded
-    # and removing it is invisible at the value projection. A perturbation that a projection cannot
+    # and removing it is invisible at the value observable. A perturbation that an observable cannot
     # see is a real phenomenon, and asserting the partition is what makes it visible here instead
     # of being discovered as a weak guard later.
     test-control-seeded-drop-last-reddens-exactly-this-partition = {
@@ -124,7 +124,7 @@ in
 
     # ★ AND THE ONE SURVIVOR IS REACHABLE, so no cell in this suite is left undemonstrated. Dropping
     # the WINNING definition instead moves it, which is the same fixture answering a perturbation
-    # its projection can see.
+    # its observable can see.
     test-control-seeded-drop-third-reddens-the-surviving-cell = {
       expr = (greenMap "identity" thirdSeed).priorityFold.thing;
       expected = false;

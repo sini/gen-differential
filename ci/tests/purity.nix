@@ -6,7 +6,7 @@
 # that named a candidate would be a harness for exactly one design wearing a general name.
 #
 # ★ TWO TOKENS ARE DELIBERATELY NOT FORBIDDEN, AND SAYING WHICH IS PART OF THE ORACLE. A named
-# `NixOS` accessor is exported as a PROJECTION, which is the corrected form of the leak this scan
+# `NixOS` accessor is exported as an OBSERVABLE, which is the corrected form of the leak this scan
 # exists to prevent: the coordinate is reachable by name instead of assumed inside the comparison.
 # And the negative result the library carries names the public apparatus it came from, which is
 # provenance rather than a dependency. A scan whose exclusions are unwritten is a scan whose next
@@ -89,8 +89,8 @@ in
         "default.nix"
         "diff.nix"
         "no-go.nix"
+        "observables.nix"
         "oracles.nix"
-        "projections.nix"
         "register.nix"
       ];
     };

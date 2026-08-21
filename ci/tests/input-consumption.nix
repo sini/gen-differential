@@ -39,7 +39,7 @@ let
   # A cell that reads a field which is constant on the happy path is exactly the shape this guard
   # exists to catch, and it caught it here before it caught it anywhere else.
   cells = i: {
-    things = gd.projections.at [ "config" "things" ] (
+    things = gd.observables.at [ "config" "things" ] (
       gd.compare.run arms.reference (
         arms.entry "synthetic" {
           n = i.elements;
@@ -48,8 +48,8 @@ let
         }
       )
     );
-    # A cell that genuinely depends on `tag`: the artifact fixture's projected derivation path.
-    out = gd.projections.at [ "config" "out" ] (
+    # A cell that genuinely depends on `tag`: the artifact fixture's observed derivation path.
+    out = gd.observables.at [ "config" "out" ] (
       gd.compare.run arms.reference (arms.entry "artifact" { inherit (i) tag; })
     );
   };

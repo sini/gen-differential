@@ -2,10 +2,10 @@
 #
 # The engine the apparatus was built to hold accountable, finally held by it: a from-scratch pure
 # merge engine compared against the reference module system, over the corpus tier its vocabulary
-# admits, at every projection each fixture declares.
+# admits, at every observable each fixture declares.
 #
 # ★ WHAT A GREEN HERE DOES AND DOES NOT SAY. It says the candidate agrees with the reference on
-# these fixtures at these projections, with the identity control green and seedable in the same run.
+# these fixtures at these observables, with the identity control green and seedable in the same run.
 # It does NOT say the candidate agrees in general, and it does not close the standing interval about
 # the shared grammar — that closes at an instantiation with a real corpus, which is deferred with
 # its own criteria. A machinery library's green must never be readable as the cross-implementation
@@ -111,9 +111,9 @@ in
       ];
     };
 
-    # Every projection each fixture declares was measured — the claim names its projection, so a
-    # projection quietly dropped would be visible here rather than absorbed into a total.
-    test-every-declared-projection-was-measured = {
+    # Every observable each fixture declares was measured — the claim names its observable, so an
+    # observable quietly dropped would be visible here rather than absorbed into a total.
+    test-every-declared-observable-was-measured = {
       expr = greenMap "candidate" consumer.suite;
       expected = {
         artifact.out = true;
@@ -129,16 +129,16 @@ in
     # ★★ THE SCOPE OF THE IDENTITY CLAIM, MEASURED RATHER THAN ASSERTED IN PROSE. The adapter DOES
     # change the reference's result — the reference module system's synthetic pseudo-option is
     # present on the bare arm and absent through the seam. The identity control above is green
-    # because NO DECLARED PROJECTION REACHES THAT SURFACE, which is a bound on the claim rather than
+    # because NO DECLARED OBSERVABLE REACHES THAT SURFACE, which is a bound on the claim rather than
     # an absence of one. Both halves are cells, so the bound cannot be quietly widened in prose.
-    test-the-adapter-changes-an-option-surface-no-projection-reaches = {
+    test-the-adapter-changes-an-option-surface-no-observable-reaches = {
       expr =
         let
           arms = gd.contract.armsOf consumer.subject;
           raw =
             arm:
             builtins.elem "_module" (
-              gd.projections.rawOptionNames (gd.compare.run arm consumer.fixtures.synthetic)
+              gd.observables.rawOptionNames (gd.compare.run arm consumer.fixtures.synthetic)
             );
         in
         {
@@ -151,18 +151,18 @@ in
       };
     };
 
-    # ★ AND THE DECLARED PROJECTION FILTERS IT ON BOTH SIDES, which is why the difference above is
+    # ★ AND THE DECLARED OBSERVABLE FILTERS IT ON BOTH SIDES, which is why the difference above is
     # invisible to every other cell here. This is the live control that `optionNames`' filter is
     # doing something: without the raw surface exported beside it the filter would be unobservable,
-    # and an unobservable narrowing is the assumption the projection layer exists to surface.
-    test-control-the-declared-option-projection-filters-the-pseudo-option = {
+    # and an unobservable narrowing is the assumption the observable layer exists to surface.
+    test-control-the-declared-option-observable-filters-the-pseudo-option = {
       expr =
         let
           r = gd.compare.run consumer.subject.reference consumer.fixtures.synthetic;
         in
         {
-          raw = builtins.elem "_module" (gd.projections.rawOptionNames r);
-          declared = builtins.elem "_module" (gd.projections.optionNames r);
+          raw = builtins.elem "_module" (gd.observables.rawOptionNames r);
+          declared = builtins.elem "_module" (gd.observables.optionNames r);
         };
       expected = {
         raw = true;
@@ -171,17 +171,17 @@ in
     };
 
     # ── THE SEEDED FAILURE ───────────────────────────────────────────────────────────────────
-    # Perturb the adapter and the identity arm goes red at every VALUE projection. Two cells survive
+    # Perturb the adapter and the identity arm goes red at every VALUE observable. Two cells survive
     # it, and both survivals are the design being correct rather than the seed being weak:
     #
-    # ★ `synthetic.shape` survives because the seed drops a CONFIG attribute and that projection
-    #   reads DECLARATIONS. A perturbation one projection cannot see is exactly why a fixture
-    #   carries a projection SET, and asserting the partition is what makes it visible here rather
+    # ★ `synthetic.shape` survives because the seed drops a CONFIG attribute and that observable
+    #   reads DECLARATIONS. A perturbation one observable cannot see is exactly why a fixture
+    #   carries an observable SET, and asserting the partition is what makes it visible here rather
     #   than discovered later as a weak guard.
     #
     # ★★ `latticeThrows.n` survives because the `throws` kind asserts MUTUAL REFUSAL AND NOT A
     #   SHARED CAUSE. The unseeded arm refuses on the merge conflict the fixture is about; the
-    #   seeded arm refuses because the adapter removed the attribute the projection reads. Both
+    #   seeded arm refuses because the adapter removed the attribute the observable reads. Both
     #   refuse, so the claim holds — and it should, because the kind asserts only that both arms
     #   decline, which is all a `tryEval`-shaped refusal reading can ever establish. Measured here
     #   rather than assumed: this cell is the record that the kind's domain is that narrow.

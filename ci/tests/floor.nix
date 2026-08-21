@@ -2,7 +2,7 @@
 #
 # The instrument this library replaces held its coverage as four gate keys, of which two were ruled
 # REQUIRED: that both stacks genuinely evaluated, and that perturbing an input moves the compared
-# projection. Without those two a parity harness reads green while asserting nothing; that is the
+# observable. Without those two a parity harness reads green while asserting nothing; that is the
 # standard failure, and these are the keys that refuse it.
 #
 # ★★ THREE OF FOUR, AND A GREEN HERE DOES NOT DISCHARGE THE FOURTH. The missing key is that a real,
@@ -28,12 +28,12 @@ let
       layers = 2;
     };
 
-  # THE TEETH: perturb a declared construction parameter and require the compared projection to
-  # move. Widening the element count adds an element, which the value projection must see.
+  # THE TEETH: perturb a declared construction parameter and require the compared observable to
+  # move. Widening the element count adds an element, which the value observable must see.
   teeth = gd.oracles.mutationTeeth {
     arm = arms.reference;
     fixture = syntheticAt 6;
-    projectionName = "things";
+    observableName = "things";
     perturb = _: syntheticAt 7;
   };
 
@@ -43,17 +43,17 @@ let
   toothlessControl = gd.oracles.mutationTeeth {
     arm = arms.reference;
     fixture = syntheticAt 6;
-    projectionName = "things";
+    observableName = "things";
     perturb = fx: fx;
   };
 
-  # ★★ AND A PERTURBATION THE PROJECTION CANNOT SEE, which is the subtler negative: the fixture
-  # really did change, and this projection is still entitled to report no movement. It is the same
-  # phenomenon the projection SET exists for.
+  # ★★ AND A PERTURBATION THE OBSERVABLE CANNOT SEE, which is the subtler negative: the fixture
+  # really did change, and this observable is still entitled to report no movement. It is the same
+  # phenomenon the observable SET exists for.
   invisibleControl = gd.oracles.mutationTeeth {
     arm = arms.reference;
     fixture = syntheticAt 6;
-    projectionName = "shape";
+    observableName = "shape";
     perturb = _: syntheticAt 7;
   };
 
@@ -103,7 +103,7 @@ in
       expected = false;
     };
 
-    test-control-a-perturbation-the-projection-cannot-see-moves-nothing = {
+    test-control-a-perturbation-the-observable-cannot-see-moves-nothing = {
       expr = invisibleControl.moved;
       expected = false;
     };
@@ -111,13 +111,13 @@ in
     # ★★ THE ANTI-VACUITY KEY HAS TEETH OF ITS OWN. Two arms that agree by both REFUSING must fail
     # `both-evaluated` — that is the entire point of the key, and a floor that could not be shown to
     # fail it would be reporting a constant. The suite below compares an arm against itself on a
-    # fixture whose projection does not exist, so both sides refuse and the values are equal.
+    # fixture whose observable does not exist, so both sides refuse and the values are equal.
     test-control-two-refusing-arms-fail-the-anti-vacuity-key = {
       expr =
         let
           missing = gd.mkFixture {
             comparison = "value";
-            projections.absent = gd.projections.at [
+            observables.absent = gd.observables.at [
               "config"
               "nothing-declares-this"
             ];
@@ -149,7 +149,7 @@ in
         let
           missing = gd.mkFixture {
             comparison = "value";
-            projections.absent = gd.projections.at [
+            observables.absent = gd.observables.at [
               "config"
               "nothing-declares-this"
             ];

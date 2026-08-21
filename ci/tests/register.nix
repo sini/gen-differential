@@ -13,7 +13,7 @@ let
   gd = genDifferential;
   arms = import ./_arms.nix { inherit nixpkgsLib nixpkgsSrc genDifferential; };
 
-  # A candidate that diverges at a known coordinate: one extra list element, so the projected list
+  # A candidate that diverges at a known coordinate: one extra list element, so the observed list
   # is three long where the reference's is two.
   drifted = gd.mkArm {
     name = "drifted";

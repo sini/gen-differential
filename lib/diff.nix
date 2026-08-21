@@ -122,13 +122,13 @@ let
     in
     if d.identical then null else builtins.head d.divergences;
 
-  # `expectThrow` takes an ALREADY-PROJECTED value; the arm:fixture wrapper lives in compare.nix.
+  # `expectThrow` takes an ALREADY-OBSERVED value; the arm:fixture wrapper lives in compare.nix.
   #
   # ★ SCOPE, STATED AT THE PRIMITIVE RATHER THAN IN A FOOTNOTE: `tryEval` catches thrown errors and
   # failed assertions, NOT every abort class — a rejected regex is the ecosystem's worked
   # counterexample. So this predicate reads the tryEval-catchable subclass of refusal, and a
   # comparison built on it inherits exactly that domain.
-  expectThrow = projection: !(builtins.tryEval (force projection)).success;
+  expectThrow = observable: !(builtins.tryEval (force observable)).success;
 in
 {
   inherit

@@ -1,7 +1,7 @@
 # THE CONTRACT — the four records, each with a required-and-total field set.
 #
 # ★ EVERY CONSTRUCT NAME IN THIS FILE IS A PLACEHOLDER UNDER A STANDING QUARANTINE. `subject`,
-# `reference`, `candidate`, `seam`, `claim`, `projections`, `comparison` and the divergence
+# `reference`, `candidate`, `seam`, `claim`, `observables`, `comparison` and the divergence
 # register are named by the specification of record and NOT by a verified primary. McKeeman 1998
 # grounds the MECHANISM (two comparable systems, one input, divergence as the signal) and the
 # reference/candidate ASYMMETRY, but grounds none of these identifiers; they resolve at their own
@@ -13,7 +13,7 @@
 # computes, AND that the published grammar had not moved — so it went red on every deliberate
 # grammar change and could not say which conjunct a red belonged to. `claim` is a required field for
 # exactly that reason: a red that cannot name what it asserts reproduces the defect under a new
-# name. `projections` is required and total for the same reason one level down — a comparison that
+# name. `observables` is required and total for the same reason one level down — a comparison that
 # defaults its compared surface has decided what it measures without saying so.
 let
   isNonEmptyString = v: builtins.isString v && v != "";
@@ -222,7 +222,7 @@ let
   mkFixture =
     {
       modules,
-      projections,
+      observables,
       comparison,
       specialArgs ? { },
       class ? null,
@@ -230,15 +230,15 @@ let
     }:
     if !(builtins.isFunction modules) then
       refuse "fixture.modules" "a fixture's modules are a function of the arm's vocabulary, so both arms run the same source"
-    else if !(builtins.isAttrs projections) || projections == { } then
-      refuse "fixture.projections" "the projection set is required and total; an empty set compares nothing and reads green"
+    else if !(builtins.isAttrs observables) || observables == { } then
+      refuse "fixture.observables" "the observable set is required and total; an empty set compares nothing and reads green"
     else if !(builtins.elem comparison comparisonKinds) then
       refuse "fixture.comparison" "`${builtins.toString comparison}' is not one of ${builtins.concatStringsSep ", " comparisonKinds}"
     else
       {
         inherit
           modules
-          projections
+          observables
           comparison
           specialArgs
           class

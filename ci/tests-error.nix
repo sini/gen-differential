@@ -42,22 +42,22 @@ in
         expectedError.msg = "subject.claim";
       };
 
-      # An empty projection set compares nothing and reads green — the exact vacuity a projection
+      # An empty observable set compares nothing and reads green — the exact vacuity an observable
       # that is "required and total" exists to refuse.
-      test-empty-projection-set-refuses = {
+      test-empty-observable-set-refuses = {
         expr = gd.mkFixture {
           modules = _: [ ];
-          projections = { };
+          observables = { };
           comparison = "value";
         };
-        expectedError.msg = "fixture.projections";
+        expectedError.msg = "fixture.observables";
       };
 
       # A comparison kind is a member of a declared set, not a free string.
       test-unknown-comparison-kind-refuses = {
         expr = gd.mkFixture {
           modules = _: [ ];
-          projections.x = x: x;
+          observables.x = x: x;
           comparison = "byteish";
         };
         expectedError.msg = "fixture.comparison";
@@ -68,7 +68,7 @@ in
       test-non-function-modules-refuses = {
         expr = gd.mkFixture {
           modules = [ ];
-          projections.x = x: x;
+          observables.x = x: x;
           comparison = "value";
         };
         expectedError.msg = "fixture.modules";
@@ -247,7 +247,7 @@ in
         expr =
           (gd.mkFixture {
             modules = _: [ ];
-            projections.x = x: x;
+            observables.x = x: x;
             comparison = "value";
           }).comparison;
         expected = "value";

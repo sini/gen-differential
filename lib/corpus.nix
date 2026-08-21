@@ -15,7 +15,7 @@
 # `types`, `mkMerge` and the priority combinators; the fixture is the same source read through
 # whichever implementation is being asked. A fixture that closed over one implementation's
 # vocabulary would be two programs compared and called one.
-{ contract, projections }:
+{ contract, observables }:
 let
   genAttrs =
     names: f:
@@ -53,16 +53,16 @@ let
       }:
       contract.mkFixture {
         comparison = "value";
-        projections = {
-          things = projections.at [
+        observables = {
+          things = observables.at [
             "config"
             "things"
           ];
-          # A second projection over the SAME fixture, because the axis is open and a claim names
+          # A second observable over the SAME fixture, because the axis is open and a claim names
           # which member it was measured at. This one sees the declared surface a value comparison
           # cannot: a candidate that computes every value correctly while declaring a different
           # option set agrees at `things` and diverges here.
-          shape = projections.withOptionShape {
+          shape = observables.withOptionShape {
             base = _: { };
             subOptionPaths.things = [ "things" ];
           };
@@ -105,17 +105,17 @@ let
 
   # ── ARTIFACT ─────────────────────────────────────────────────────────────────────────────────
   # ★ THE `drvPath` KIND IS DEMONSTRABLE WITHOUT A BUILD SYSTEM, and it has to be, because this
-  # library ships no package set. The kind reads `.drvPath` off whatever the projection yields; a
+  # library ships no package set. The kind reads `.drvPath` off whatever the observable yields; a
   # fixture whose config carries that attribute exercises the kind's whole mechanism — including
   # its refusal branch — over an ordinary string. The domain accessor that yields a real system
-  # derivation is exported as a NAMED projection, so a caller with a package set reaches for it by
+  # derivation is exported as a NAMED observable, so a caller with a package set reaches for it by
   # name rather than finding it assumed.
   artifact = {
     mk =
       { tag }:
       contract.mkFixture {
         comparison = "drvPath";
-        projections.out = projections.at [
+        observables.out = observables.at [
           "config"
           "out"
         ];
@@ -144,7 +144,7 @@ let
     }:
     contract.mkFixture {
       comparison = "value";
-      projections.thing = projections.at [
+      observables.thing = observables.at [
         "config"
         "thing"
       ];
@@ -227,7 +227,7 @@ let
         _:
         contract.mkFixture {
           comparison = "throws";
-          projections.n = projections.at [
+          observables.n = observables.at [
             "config"
             "n"
           ];
