@@ -143,9 +143,20 @@ in
     test-the-identity-arm-is-the-reference-body-through-the-seam = {
       expr =
         let
+          # Minimal well-formed arms rather than bare strings: `mkSubject` shape-checks BOTH halves
+          # at acceptance, so a placeholder that is not arm-shaped is now refused by name. That the
+          # arms are stubs is fine — this cell is about where the IDENTITY arm comes from, and it
+          # comes from the seam alone.
+          stub =
+            n:
+            gd.mkArm {
+              name = n;
+              vocab = { };
+              eval = _: { };
+            };
           subject = gd.mkSubject {
-            reference = "REF";
-            candidate = "CAND";
+            reference = stub "REF";
+            candidate = stub "CAND";
             proposition = "p";
             seam = gd.mkSeam {
               name = "s";

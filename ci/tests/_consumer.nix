@@ -52,9 +52,17 @@ let
   # carry the module system's own synthetic pseudo-option, the candidate's do not).
   #
   # ★★★ AND THAT IS EXACTLY WHAT THE IDENTITY CONTROL ASSERTS HERE: *the adapter that makes the
-  # candidate comparable does not itself change the answer*. Routing the REFERENCE through it must
-  # be invisible. Without that claim, every green in this file would be a green about the adapter as
-  # much as about the candidate, and there would be no way to tell which.
+  # candidate comparable does not itself change the answer **at the projections each fixture
+  # declares***. Routing the REFERENCE through it must be invisible there. Without that claim, every
+  # green in this file would be a green about the adapter as much as about the candidate, and there
+  # would be no way to tell which.
+  #
+  # ★★ THE SCOPE IS NOT DECORATION — THE UNSCOPED SENTENCE IS MEASURABLY FALSE. The adapter really
+  # does change the reference's result: `options._module` is present on the bare reference and
+  # absent through the seam. The control is green because NO DECLARED PROJECTION REACHES THAT
+  # SURFACE — `at [ "config" … ]` never descends into `options`, and `optionNames` filters the
+  # pseudo-option on both sides. So the honest claim is bounded by the projection set, and widening
+  # that set is what would put the adapter's own change back in view.
   install =
     impl:
     gd.mkArm {

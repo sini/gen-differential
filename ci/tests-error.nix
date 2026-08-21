@@ -106,6 +106,76 @@ in
         expectedError.msg = "seam.install";
       };
 
+      # ── THE SUBJECT'S OTHER THREE REQUIRED FIELDS ─────────────────────────────────────────
+      # ★★★ THE CLASS, NOT THE INSTANCE. `tryEval` catches thrown errors and failed assertions and
+      # NOT a type or missing-attribute error, so a malformed record reaching a selection aborts
+      # the whole evaluation instead of reddening a cell. This library met that class once at the
+      # `drvPath` kind and fixed it there; measured afterwards, `mkSubject` still ACCEPTED
+      # `seam = null`, and the failure surfaced as `expected a set but found null` — propagating
+      # straight out of `tryEval`. These three cells are the class discharged at the contract's own
+      # entry point, so a consumer who hand-rolls a subject (which is what the quick start shows)
+      # gets a named refusal about the design rather than an abort about attribute lookup.
+      test-non-seam-subject-refuses = {
+        expr = gd.mkSubject {
+          reference = gd.mkArm {
+            name = "r";
+            vocab = { };
+            eval = _: { };
+          };
+          candidate = gd.mkArm {
+            name = "c";
+            vocab = { };
+            eval = _: { };
+          };
+          seam = null;
+          proposition = "p";
+        };
+        expectedError.msg = "subject.seam";
+      };
+
+      test-non-arm-reference-refuses = {
+        expr = gd.mkSubject {
+          reference = null;
+          candidate = gd.mkArm {
+            name = "c";
+            vocab = { };
+            eval = _: { };
+          };
+          seam = gd.mkSeam {
+            name = "s";
+            install = b: b;
+            referenceBody = { };
+          };
+          proposition = "p";
+        };
+        expectedError.msg = "subject.reference";
+      };
+
+      # ★ THE CANDIDATE HALF IS CHECKED AS WELL AS THE REFERENCE HALF, so the asymmetry the contract
+      # draws between them is an asymmetry of MEANING and never of validation. This one is
+      # field-shaped rather than null — an attrset missing `eval` — because that is the malformed
+      # record a consumer actually produces, and it is the one a bare `isAttrs` check would admit.
+      test-non-arm-candidate-refuses = {
+        expr = gd.mkSubject {
+          reference = gd.mkArm {
+            name = "r";
+            vocab = { };
+            eval = _: { };
+          };
+          candidate = {
+            name = "c";
+            vocab = { };
+          };
+          seam = gd.mkSeam {
+            name = "s";
+            install = b: b;
+            referenceBody = { };
+          };
+          proposition = "p";
+        };
+        expectedError.msg = "subject.candidate.eval";
+      };
+
       # A register entry authorizes a divergence. Without the authorization it is indistinguishable
       # from a bug someone grew used to.
       test-register-entry-without-ruling-refuses = {
@@ -146,6 +216,33 @@ in
       # LIVE CONTROL, same run and same instrument: the same constructors ANSWER on well-formed
       # input. Without it every cell above is satisfied by a library that refuses everything, which
       # is a different defect wearing the same green.
+      # ★ THE CONTROL FOR THE THREE CELLS ABOVE, and it is the one that matters most: a WELL-FORMED
+      # subject still answers. Without it, all three are satisfied by a `mkSubject` that refuses
+      # every subject it is handed — which would redden the whole suite elsewhere, but would satisfy
+      # these cells exactly as a correct implementation does.
+      test-control-well-formed-subject-answers = {
+        expr =
+          (gd.mkSubject {
+            reference = gd.mkArm {
+              name = "r";
+              vocab = { };
+              eval = _: { };
+            };
+            candidate = gd.mkArm {
+              name = "c";
+              vocab = { };
+              eval = _: { };
+            };
+            seam = gd.mkSeam {
+              name = "s";
+              install = b: b;
+              referenceBody = "REF-BODY";
+            };
+            proposition = "p";
+          }).proposition;
+        expected = "p";
+      };
+
       test-control-well-formed-fixture-answers = {
         expr =
           (gd.mkFixture {

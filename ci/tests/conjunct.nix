@@ -61,6 +61,70 @@ let
   };
 
   cell = suite: which: suite.cells.valueMeta.thing.${which};
+
+  # ── THE ONE-SIDED-KEY CLASS, WITNESSED AT A COMPARISON CELL ─────────────────────────────────
+  #
+  # ★★ THE VALUE WALK TAKES ITS KEY UNION FROM BOTH SIDES, AND UNTIL NOW ONLY THE PRIMITIVE SAID SO.
+  # A walk that enumerated the reference's keys alone would be blind to anything the CANDIDATE
+  # declares and the reference does not — a divergence class that reads as AGREEMENT, which is the
+  # worst shape a comparison can have. `machinery` asserts that reading at `diffAt`; nothing asserted
+  # it end-to-end, because no shipped fixture can: fixtures are symmetric by construction, both arms
+  # running the same source. The asymmetry has to come from an ARM.
+  #
+  # Both directions ship, because they are different readings of the record: a candidate-only key
+  # puts `__absent` on the reference side, a reference-only key puts it on the other.
+  keyFixture = gd.mkFixture {
+    comparison = "value";
+    projections.set = gd.projections.at [
+      "config"
+      "set"
+    ];
+    modules = v: [
+      {
+        options.set = v.mkOption {
+          type = v.types.attrsOf v.types.str;
+          default = { };
+        };
+      }
+      { config.set.shared = "s"; }
+    ];
+  };
+
+  armAdding =
+    name:
+    gd.mkArm {
+      inherit name;
+      vocab = arms.vocabOf nixpkgsLib;
+      eval =
+        request:
+        nixpkgsLib.evalModules (
+          request // { modules = request.modules ++ [ { config.set.extra = "x"; } ]; }
+        );
+    };
+
+  keyCell =
+    subject:
+    (gd.mkSuite {
+      inherit subject;
+      fixtures.keyFixture = keyFixture;
+    }).cells.keyFixture.set.candidate;
+
+  candidateOnlyKey = keyCell (
+    gd.mkSubject {
+      inherit (arms) reference seam;
+      candidate = armAdding "candidate-declares-extra";
+      proposition = "P1 · the design under test computes what the reference computes";
+    }
+  );
+
+  referenceOnlyKey = keyCell (
+    gd.mkSubject {
+      inherit (arms) seam;
+      reference = armAdding "reference-declares-extra";
+      inherit (arms.subject) candidate;
+      proposition = "P2 · the published grammar is unchanged since the claim was last measured";
+    }
+  );
 in
 {
   flake.tests.conjunct = {
@@ -162,6 +226,47 @@ in
       expr =
         gd.oracles.explain (cell candidateSeeded "candidate")
         != gd.oracles.explain (cell referenceSeeded "candidate");
+      expected = true;
+    };
+
+    # ── THE ONE-SIDED-KEY WITNESS ────────────────────────────────────────────────────────────
+    # ★★ A KEY THE CANDIDATE DECLARES AND THE REFERENCE DOES NOT IS A DIVERGENCE AT A COMPARISON
+    # CELL, not only at the value walk. A walk taking its keys from the reference alone would report
+    # this pairing IDENTICAL — agreement where there is none — and no other cell in this repository
+    # would move.
+    test-a-candidate-only-key-is-a-divergence-at-a-comparison-cell = {
+      expr = candidateOnlyKey.green;
+      expected = false;
+    };
+
+    test-the-candidate-only-key-is-located-with-the-reference-side-absent = {
+      expr = candidateOnlyKey.firstDivergence;
+      expected = {
+        path = [ "extra" ];
+        aValue = "__absent";
+        bValue = "x";
+      };
+    };
+
+    # ★ THE MIRROR, because the two are different readings and only one of them would survive a
+    # one-sided walk in each direction.
+    test-a-reference-only-key-mirrors-it = {
+      expr = referenceOnlyKey.firstDivergence;
+      expected = {
+        path = [ "extra" ];
+        aValue = "x";
+        bValue = "__absent";
+      };
+    };
+
+    # LIVE CONTROL, same instrument and same run: with NEITHER arm adding the key the same fixture
+    # is green — so the two reds above are the extra key and not the fixture being broken.
+    test-control-the-key-fixture-agrees-when-neither-arm-adds-the-key = {
+      expr =
+        (gd.mkSuite {
+          inherit (arms) subject;
+          fixtures.keyFixture = keyFixture;
+        }).cells.keyFixture.set.candidate.green;
       expected = true;
     };
 

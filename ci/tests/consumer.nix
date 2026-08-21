@@ -126,6 +126,50 @@ in
       };
     };
 
+    # ★★ THE SCOPE OF THE IDENTITY CLAIM, MEASURED RATHER THAN ASSERTED IN PROSE. The adapter DOES
+    # change the reference's result — the reference module system's synthetic pseudo-option is
+    # present on the bare arm and absent through the seam. The identity control above is green
+    # because NO DECLARED PROJECTION REACHES THAT SURFACE, which is a bound on the claim rather than
+    # an absence of one. Both halves are cells, so the bound cannot be quietly widened in prose.
+    test-the-adapter-changes-an-option-surface-no-projection-reaches = {
+      expr =
+        let
+          arms = gd.contract.armsOf consumer.subject;
+          raw =
+            arm:
+            builtins.elem "_module" (
+              gd.projections.rawOptionNames (gd.compare.run arm consumer.fixtures.synthetic)
+            );
+        in
+        {
+          bareReferenceCarriesIt = raw arms.reference;
+          throughTheSeamDoesNot = raw arms.identity;
+        };
+      expected = {
+        bareReferenceCarriesIt = true;
+        throughTheSeamDoesNot = false;
+      };
+    };
+
+    # ★ AND THE DECLARED PROJECTION FILTERS IT ON BOTH SIDES, which is why the difference above is
+    # invisible to every other cell here. This is the live control that `optionNames`' filter is
+    # doing something: without the raw surface exported beside it the filter would be unobservable,
+    # and an unobservable narrowing is the assumption the projection layer exists to surface.
+    test-control-the-declared-option-projection-filters-the-pseudo-option = {
+      expr =
+        let
+          r = gd.compare.run consumer.subject.reference consumer.fixtures.synthetic;
+        in
+        {
+          raw = builtins.elem "_module" (gd.projections.rawOptionNames r);
+          declared = builtins.elem "_module" (gd.projections.optionNames r);
+        };
+      expected = {
+        raw = true;
+        declared = false;
+      };
+    };
+
     # ── THE SEEDED FAILURE ───────────────────────────────────────────────────────────────────
     # Perturb the adapter and the identity arm goes red at every VALUE projection. Two cells survive
     # it, and both survivals are the design being correct rather than the seed being weak:
