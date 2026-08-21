@@ -30,6 +30,87 @@ let
     "throws"
   ];
 
+  # ── THE SHAPE PREDICATES — stated ONCE, applied at BOTH boundaries ──────────────────────────
+  #
+  # ★★★ THIS IS A CLASS, AND IT IS DISCHARGED AT THE CLASS RATHER THAN AT ONE INSTANCE.
+  # `builtins.tryEval` catches thrown errors and failed assertions and NOT a type or missing-
+  # attribute error, so a malformed record that reaches a selection or an application aborts the
+  # WHOLE evaluation instead of reddening a cell. This library already met that class once, at the
+  # `drvPath` comparison kind, and fixing it there left the identical hole at the contract's own
+  # entry point: a subject built with `seam = null` was ACCEPTED, and the failure surfaced later as
+  # `expected a set but found null` — propagating straight out of `tryEval`, taking the gate down.
+  #
+  # The fix is not another guard at another call site. It is ONE statement of what an arm and a seam
+  # ARE, applied both where they are constructed and where they are accepted. A record that reaches
+  # `identityArm` has been shape-checked whether the consumer used `mkArm`/`mkSeam` or hand-rolled
+  # it — and a hand-rolled one is exactly what the README's quick start invites.
+  #
+  # ★ THE LIMIT, STATED SO IT IS NOT MISTAKEN FOR MORE: this checks SHAPE, never PROVENANCE. It
+  # establishes that the fields exist and are the right kind of thing, so a downstream selection or
+  # application cannot abort uncatchably. It cannot establish that `install` installs anything, and
+  # nothing here pretends to.
+  armProblem =
+    v:
+    if !(builtins.isAttrs v) then
+      {
+        field = "";
+        why = "an arm is the record `mkArm' builds; a ${builtins.typeOf v} cannot be evaluated through";
+      }
+    else if !((v ? name) && isNonEmptyString v.name) then
+      {
+        field = ".name";
+        why = "an arm's name is what a red says moved; it cannot be missing or empty";
+      }
+    else if !((v ? vocab) && builtins.isAttrs v.vocab) then
+      {
+        field = ".vocab";
+        why = "the vocabulary a fixture's modules are written against must be an attribute set";
+      }
+    else if !((v ? eval) && builtins.isFunction v.eval) then
+      {
+        field = ".eval";
+        why = "an arm evaluates a request, so `eval' must be a function";
+      }
+    else
+      null;
+
+  seamProblem =
+    v:
+    if !(builtins.isAttrs v) then
+      {
+        field = "";
+        why = "a seam is the record `mkSeam' builds; a ${builtins.typeOf v} has no substitution point to install at";
+      }
+    else if !((v ? name) && isNonEmptyString v.name) then
+      {
+        field = ".name";
+        why = "a seam's name is its identity; two subjects sharing a seam name is a suite with one seam";
+      }
+    else if !((v ? install) && builtins.isFunction v.install) then
+      {
+        field = ".install";
+        why = "the seam installs a body and yields an arm, so `install' must be a function";
+      }
+    else if !(v ? referenceBody) then
+      {
+        field = ".referenceBody";
+        why = "the identity arm IS `install referenceBody'; without the reference's body there is no control to derive";
+      }
+    else
+      null;
+
+  # `where` names the role the record is filling, so one predicate yields `arm.eval` at construction
+  # and `subject.candidate.eval` at acceptance — the same defect, reported where the reader is.
+  checkShape =
+    problem: where: v:
+    let
+      p = problem v;
+    in
+    if p == null then v else refuse "${where}${p.field}" p.why;
+
+  checkArm = checkShape armProblem;
+  checkSeam = checkShape seamProblem;
+
   # ── (0) THE ARM — an evaluator, treated opaquely ────────────────────────────────────────────
   # Not one of the specification's four records: it is what `reference` and `candidate` ARE, given
   # a name so the two halves of a subject have a shape rather than a convention.
@@ -45,16 +126,9 @@ let
       vocab,
       eval,
     }:
-    if !(isNonEmptyString name) then
-      refuse "arm.name" "an arm's name is what a red says moved; it cannot be empty"
-    else if !(builtins.isFunction eval) then
-      refuse "arm.eval (${name})" "an arm evaluates a request, so `eval` must be a function"
-    else if !(builtins.isAttrs vocab) then
-      refuse "arm.vocab (${name})" "the vocabulary a fixture's modules are written against must be an attribute set"
-    else
-      {
-        inherit name vocab eval;
-      };
+    checkArm "arm" {
+      inherit name vocab eval;
+    };
 
   # ── (a) THE SUBJECT — the parameterization, made structural ─────────────────────────────────
   #
@@ -76,8 +150,38 @@ let
       seam,
       proposition,
     }:
+    let
+      # ★ ACCEPTANCE IS A BOUNDARY, NOT A FORMALITY. The same predicates the constructors apply,
+      # re-applied where records are ACCEPTED — because a subject can be assembled from records
+      # this library never built, and a hand-rolled one is exactly what the quick start invites.
+      #
+      # ★★ AND THE REFUSAL IS EAGER, WHICH IS THE WHOLE POINT. Written as attribute values the
+      # checks would fire only when the field is read, so `mkSubject` would return a record that
+      # looks accepted and aborts later — the same "looks fine until touched" shape as the defect
+      # being closed. Forcing the list in the condition below refuses at construction, like every
+      # other constructor in this file.
+      problems = builtins.filter (x: x.p != null) [
+        {
+          where = "subject.seam";
+          p = seamProblem seam;
+        }
+        {
+          where = "subject.reference";
+          p = armProblem reference;
+        }
+        {
+          where = "subject.candidate";
+          p = armProblem candidate;
+        }
+      ];
+    in
     if !(isNonEmptyString proposition) then
       refuse "subject.proposition" "every assertion names the claim it belongs to; an unnamed claim is the conjunction defect"
+    else if problems != [ ] then
+      let
+        f = builtins.head problems;
+      in
+      refuse "${f.where}${f.p.field}" f.p.why
     else
       {
         inherit
@@ -98,14 +202,9 @@ let
       install,
       referenceBody,
     }:
-    if !(isNonEmptyString name) then
-      refuse "seam.name" "a seam's name is its identity; two subjects sharing a seam name is a suite with one seam"
-    else if !(builtins.isFunction install) then
-      refuse "seam.install (${name})" "the seam installs a body and yields an arm, so `install` must be a function"
-    else
-      {
-        inherit name install referenceBody;
-      };
+    checkSeam "seam" {
+      inherit name install referenceBody;
+    };
 
   # THE IDENTITY ARM, derived and never supplied. A consumer cannot hand in an identity arm that
   # bypasses the seam, because there is no field to hand it in through.

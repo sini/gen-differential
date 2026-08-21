@@ -43,11 +43,21 @@ let
   ];
 
   # The declared OPTION SURFACE rather than the values — the shape of what was declared, which a
-  # value comparison cannot see. `_module` is the module system's own synthetic pseudo-option and is
-  # filtered, so the surface is the real option names only.
+  # value comparison cannot see.
+  #
+  # ★★ THE `_module` FILTER IS PART OF THIS PROJECTION'S DECLARED MEANING, NOT A TIDY-UP, AND IT IS
+  # A REAL NARROWING. `_module` is the reference module system's own synthetic pseudo-option; an
+  # implementation that does not publish it is not thereby divergent, so comparing it would redden a
+  # cell for a difference no proposition here covers. Filtering is the right default — and it means
+  # **a candidate that wrongly emitted a `_module`-shaped option is invisible at this projection.**
+  # That is exactly the kind of buried assumption the projection layer exists to surface, so the
+  # unfiltered surface is exported beside it: a caller who needs to see the pseudo-option reaches
+  # for `rawOptionNames` BY NAME, and nobody has to defeat a filter they cannot see.
   dropModule = builtins.filter (n: n != "_module");
 
-  optionNames = result: dropModule (builtins.attrNames result.options);
+  rawOptionNames = result: builtins.attrNames result.options;
+
+  optionNames = result: dropModule (rawOptionNames result);
 
   # Augment a base projection with option-shape data, so one comparison can assert values AND the
   # declared surface they came from. `subOptionPaths` maps an option name to the location list its
@@ -73,6 +83,7 @@ in
     config
     nixosToplevel
     optionNames
+    rawOptionNames
     withOptionShape
     ;
 }
