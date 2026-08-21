@@ -1,6 +1,6 @@
 # gen-differential — comparison machinery for a differential test
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-pink?logo=github)](https://github.com/sponsors/sini)
+[![CI](https://github.com/sini/gen-differential/actions/workflows/ci.yml/badge.svg)](https://github.com/sini/gen-differential/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-pink?logo=github)](https://github.com/sponsors/sini)
 
 > "Differential testing requires that two or more comparable systems be available to the tester."
 > — W. M. McKeeman, *Differential Testing for Software*, Digital Technical Journal **10**(1), 1998, pp. 100–107
