@@ -1,9 +1,9 @@
-# THE CORPUS — the registry shape, and the pure fixtures this library ships.
+# THE SUITE — the registry shape, and the pure fixtures this library ships.
 #
 # ★★ WHAT SHIPS HERE IS SYNTHETIC AND PURE, BY RULING, AND THE CONTRACT IS WIDER THAN WHAT SHIPS.
-# A domain corpus — real hosts, real templates, a real fleet — is deferred to the instantiation that
+# A domain suite — real hosts, real templates, a real fleet — is deferred to the instantiation that
 # has one, and arrives there as an argument like every other. That distinction is the entire reason
-# the comparison is parameterized: deferring the corpus costs no redesign, because the corpus was
+# the comparison is parameterized: deferring the suite costs no redesign, because the suite was
 # never inside the library to begin with.
 #
 # ★ AND THE DEFERRAL IS NOT COSMETIC. A library shipping exactly one domain arm would be
@@ -248,10 +248,10 @@ let
   }
   // landmines;
 
-  # Every entry, validated through the registry constructor. Reaching the corpus through this
+  # Every entry, validated through the registry constructor. Reaching the suite through this
   # attribute rather than the raw literals above is what makes the shape a contract instead of a
   # convention.
-  registry = builtins.mapAttrs (_: contract.mkCorpusEntry) entries;
+  registry = builtins.mapAttrs (_: contract.mkSuiteEntry) entries;
 
   # Entries a caller's vocabulary can actually run. `core` is a subset of `ordered`, so an arm
   # declaring `ordered` draws everything.

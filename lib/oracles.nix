@@ -14,9 +14,9 @@ let
   #
   # ★ THREE OF FOUR. The instrument this library replaces held its coverage as four gate keys. The
   # fourth — that a REAL, domain-shaped tree flattens identically through both grammars — is not
-  # met here and is not weakened: it is a property of a domain corpus, and this library's fixtures
+  # met here and is not weakened: it is a property of a domain suite, and this library's fixtures
   # are synthetic and pure by ruling. A green here does NOT discharge that fourth key; it is met
-  # when an instantiation with a real corpus supplies it. Naming the three rather than calling the
+  # when an instantiation with a real suite supplies it. Naming the three rather than calling the
   # floor complete is the difference between a deferral and a silent shortfall.
   floorKeys = [
     "all-identical"

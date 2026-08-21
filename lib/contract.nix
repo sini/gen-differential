@@ -246,7 +246,7 @@ let
           ;
       };
 
-  # ── (c) THE CORPUS ENTRY — the registry shape, adopted rather than redesigned ────────────────
+  # ── (c) THE SUITE ENTRY — the registry shape, adopted rather than redesigned ────────────────
   #
   # `defaultParams` stays because CONSTRUCTION-TIME ARGUMENTS AND COMPARISON METADATA ARE DIFFERENT
   # AXES and a registry has to state both: an entry whose `mk` needs an argument the registry
@@ -264,7 +264,7 @@ let
   # only through `instantiate`, which yields a fixture. The entry's copy is therefore unreachable
   # from a cell, so the two could not be mistaken for one value in two places even by a reader who
   # wanted to — and a second name to guard a precedence the code already enforces earns nothing.
-  mkCorpusEntry =
+  mkSuiteEntry =
     {
       mk,
       defaultParams,
@@ -272,13 +272,13 @@ let
       tier,
     }:
     if !(builtins.isFunction mk) then
-      refuse "corpusEntry.mk" "an entry constructs a fixture from parameters, so `mk` is a function"
+      refuse "suiteEntry.mk" "an entry constructs a fixture from parameters, so `mk` is a function"
     else if !(builtins.isAttrs defaultParams) then
-      refuse "corpusEntry.defaultParams" "construction parameters are an attribute set, possibly empty"
+      refuse "suiteEntry.defaultParams" "construction parameters are an attribute set, possibly empty"
     else if !(builtins.elem comparison comparisonKinds) then
-      refuse "corpusEntry.comparison" "`${builtins.toString comparison}' is not one of ${builtins.concatStringsSep ", " comparisonKinds}"
+      refuse "suiteEntry.comparison" "`${builtins.toString comparison}' is not one of ${builtins.concatStringsSep ", " comparisonKinds}"
     else if !(isNonEmptyString tier) then
-      refuse "corpusEntry.tier" "a tier names which suites may draw the entry; it cannot be empty"
+      refuse "suiteEntry.tier" "a tier names the vocabulary an entry needs, so a caller draws only what its arm can actually run; it cannot be empty"
     else
       {
         inherit
@@ -301,7 +301,7 @@ in
     identityArm
     armsOf
     mkFixture
-    mkCorpusEntry
+    mkSuiteEntry
     instantiate
     ;
 }

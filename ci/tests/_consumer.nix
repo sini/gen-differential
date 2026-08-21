@@ -1,6 +1,6 @@
 # THE FIRST CONSUMER — a pure module-merge engine held against the reference on synthetic fixtures.
 #
-# ★ THIS IS THE INSTANTIATION THE LIBRARY WAS SPECIFIED FOR, AND IT NEEDS NO DOMAIN CORPUS. The
+# ★ THIS IS THE INSTANTIATION THE LIBRARY WAS SPECIFIED FOR, AND IT NEEDS NO DOMAIN SUITE. The
 # candidate is a from-scratch reimplementation of the definition→value fold: a genuinely different
 # program, not a re-host of the reference's own body. That is what makes it a candidate in
 # McKeeman's sense — "two or more comparable systems", one input, divergence as the signal — rather
@@ -20,8 +20,8 @@ let
   gd = genDifferential;
 
   # ── THE CORE VOCABULARY ──────────────────────────────────────────────────────────────────────
-  # ★ THE CANDIDATE DOES NOT PUBLISH THE ORDERING COMBINATORS, AND THE CORPUS SAYS SO RATHER THAN
-  # DISCOVERING IT MID-SUITE. Each corpus entry declares the vocabulary TIER it needs; drawing the
+  # ★ THE CANDIDATE DOES NOT PUBLISH THE ORDERING COMBINATORS, AND THE SUITE SAYS SO RATHER THAN
+  # DISCOVERING IT MID-RUN. Each suite entry declares the vocabulary TIER it needs; drawing the
   # `core` tier is how a candidate with a smaller surface takes the fixtures it can actually run,
   # instead of aborting on a missing attribute halfway through and leaving a reader to work out
   # which fixture was the problem.
@@ -112,7 +112,7 @@ let
 
   # THE FIXTURES THE CANDIDATE'S VOCABULARY ADMITS, selected by the registry's declared tier rather
   # than by a hand-kept list that would drift from it.
-  coreEntries = gd.corpus.ofTier "core";
+  coreEntries = gd.suite.ofTier "core";
   fixtures = builtins.mapAttrs (
     name: entry:
     gd.contract.instantiate entry (

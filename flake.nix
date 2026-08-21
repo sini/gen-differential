@@ -8,7 +8,7 @@
   # as the instrument's dependency and once as the design under test.
   #
   # It costs nothing, because both arms are arguments. The reference evaluator, the design under
-  # test, the substitution seam, the corpus and the observables all arrive at the call site — so
+  # test, the substitution seam, the suite and the observables all arrive at the call site — so
   # there is no substrate left for this flake to declare.
   #
   # The test plane declares what it needs (`./ci`), which no consumer pins.

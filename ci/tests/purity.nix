@@ -46,7 +46,7 @@ let
     # A named candidate. An instrument that knows one design's name is that design's harness.
     "gen-merge"
     "evalModuleTree"
-    # Domain content. The corpus is synthetic and pure by ruling; these are the tiers that are not.
+    # Domain content. The suite is synthetic and pure by ruling; these are the tiers that are not.
     "denTemplate"
     "denFleet"
     "nix-config"
@@ -85,13 +85,13 @@ in
       expected = [
         "compare.nix"
         "contract.nix"
-        "corpus.nix"
         "default.nix"
         "diff.nix"
         "no-go.nix"
         "observables.nix"
         "oracles.nix"
         "register.nix"
+        "suite.nix"
       ];
     };
 

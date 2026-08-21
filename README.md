@@ -22,7 +22,7 @@ the machinery works — never that any particular design agrees with any particu
 - [Observables](#observables)
 - [The divergence register](#the-divergence-register)
 - [The oracles](#the-oracles)
-- [The corpus](#the-corpus)
+- [The suite](#the-suite)
 - [The cross-scope sharing NO-GO](#the-cross-scope-sharing-no-go)
 - [Dependencies](#dependencies)
 - [Testing](#testing)
@@ -112,10 +112,10 @@ fixture = {
 their own `mkOption` / `types` / `mkMerge`. A fixture closed over one implementation's vocabulary
 would be two programs compared and called one.
 
-### The corpus entry
+### The suite entry
 
 ```nix
-corpusEntry = { mk; defaultParams; comparison; tier; }
+suiteEntry = { mk; defaultParams; comparison; tier; }
 ```
 
 Construction-time arguments and comparison metadata are **different axes**, and the registry states
@@ -154,7 +154,7 @@ let
 
   suite = gd.mkSuite {
     inherit subject;
-    fixtures = builtins.mapAttrs (_: e: gd.contract.instantiate e { }) (gd.corpus.ofTier "core");
+    fixtures = builtins.mapAttrs (_: e: gd.contract.instantiate e { }) (gd.suite.ofTier "core");
   };
 in
   suite.green            # the verdict
@@ -257,7 +257,7 @@ no-regression signal for the harness and said nothing whatever about the corpus.
 Consumption is demonstrated **by perturbation**, never by a syntactic reachability reading: an input
 is consumed when moving it moves a cell. "Is it mentioned" passes for a mention nothing forces.
 
-## The corpus
+## The suite
 
 Synthetic and pure. `synthetic` (a width-and-depth knob over the merge fold), `artifact` (a
 derivation-shaped value, so the `drvPath` kind is demonstrable without a package set), and four
@@ -265,11 +265,11 @@ landmines — the merge behaviours a reimplementation is most likely to get subt
 to one option so a red names the rule rather than a region.
 
 Every entry declares the vocabulary **tier** it needs (`core`, or `ordered` for the ordering
-combinators). `gd.corpus.ofTier` is how a candidate with a smaller published surface takes the
+combinators). `gd.suite.ofTier` is how a candidate with a smaller published surface takes the
 fixtures it can actually run, instead of aborting on a missing attribute halfway through a suite.
 
 **The contract takes every tier; what ships is narrower than what the API can express.** That
-distinction is the whole point of parameterizing the comparison, and it is why a domain corpus costs
+distinction is the whole point of parameterizing the comparison, and it is why a domain suite costs
 no redesign to add later.
 
 ## The cross-scope sharing NO-GO
@@ -325,10 +325,10 @@ are proven once and then deleted is a guard whose teeth are a historical claim.
 Stated as obligations, so silence is not read as settlement.
 
 - **The fourth coverage-floor key.** Three of four are met here. The fourth — that a real,
-  domain-shaped tree flattens identically through both grammars — is a property of a domain corpus
+  domain-shaped tree flattens identically through both grammars — is a property of a domain suite
   and is owed by the instantiation that has one.
 - **Agreement with an external module system in general.** The machinery that makes that assertable
-  lands here; the assertion is made at an instantiation with a real corpus.
+  lands here; the assertion is made at an instantiation with a real suite.
 - **The rung differential.** The `rung` coordinate ships in the contract and is deliberately
   **unexercised**: the coordinate must exist for a ladder to be instantiated without re-opening the
   contract, and there is no domain rung here to exercise it against. It is the one declared input

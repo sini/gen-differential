@@ -169,11 +169,11 @@ in
       expected = "installed:REF-BODY";
     };
 
-    # A corpus entry's construction parameters are overridable at the call site, defaults under
+    # A suite entry's construction parameters are overridable at the call site, defaults under
     # caller values — construction arguments and comparison metadata being different axes is the
     # whole reason the registry states both.
     test-entry-defaults-are-overridable-at-the-call-site = {
-      expr = (gd.contract.instantiate gd.corpus.registry.artifact { tag = "zzz"; }).comparison;
+      expr = (gd.contract.instantiate gd.suite.registry.artifact { tag = "zzz"; }).comparison;
       expected = "drvPath";
     };
 
@@ -188,7 +188,7 @@ in
           "mk"
           "tier"
         ]
-      ) (builtins.attrValues gd.corpus.registry);
+      ) (builtins.attrValues gd.suite.registry);
       expected = true;
     };
 
@@ -197,8 +197,8 @@ in
     # here as a set with one member.
     test-the-tiers-partition-the-registry = {
       expr = {
-        core = builtins.attrNames (gd.corpus.ofTier "core");
-        ordered = builtins.attrNames (gd.corpus.ofTier "ordered");
+        core = builtins.attrNames (gd.suite.ofTier "core");
+        ordered = builtins.attrNames (gd.suite.ofTier "ordered");
       };
       expected = {
         core = [

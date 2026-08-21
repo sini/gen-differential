@@ -99,7 +99,7 @@ let
   # The registry's declared defaults are the apparatus's; the suite instantiates smaller so a full
   # run stays a test rather than a benchmark. That the two can differ is what `defaultParams` is
   # for — construction arguments and comparison metadata are different axes.
-  entry = name: params: gd.contract.instantiate gd.corpus.registry.${name} params;
+  entry = name: params: gd.contract.instantiate gd.suite.registry.${name} params;
 
   fixtures = {
     synthetic = entry "synthetic" {

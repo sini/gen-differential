@@ -1,13 +1,13 @@
 # THE CONSUMER DEMONSTRATION — the first consumer's differential, run here.
 #
 # The engine the apparatus was built to hold accountable, finally held by it: a from-scratch pure
-# merge engine compared against the reference module system, over the corpus tier its vocabulary
+# merge engine compared against the reference module system, over the suite tier its vocabulary
 # admits, at every observable each fixture declares.
 #
 # ★ WHAT A GREEN HERE DOES AND DOES NOT SAY. It says the candidate agrees with the reference on
 # these fixtures at these observables, with the identity control green and seedable in the same run.
 # It does NOT say the candidate agrees in general, and it does not close the standing interval about
-# the shared grammar — that closes at an instantiation with a real corpus, which is deferred with
+# the shared grammar — that closes at an instantiation with a real suite, which is deferred with
 # its own criteria. A machinery library's green must never be readable as the cross-implementation
 # bar being met.
 {
@@ -103,7 +103,7 @@ in
     # line above: a reader can see what was excluded and why, from the suite itself.
     test-ordered-tier-entries-are-excluded-by-declaration = {
       expr = builtins.attrNames (
-        builtins.removeAttrs gd.corpus.registry (builtins.attrNames consumer.coreEntries)
+        builtins.removeAttrs gd.suite.registry (builtins.attrNames consumer.coreEntries)
       );
       expected = [
         "order"

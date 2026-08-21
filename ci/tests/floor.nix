@@ -1,4 +1,4 @@
-# THE COVERAGE FLOOR — three keys here, the fourth deferred with its corpus.
+# THE COVERAGE FLOOR — three keys here, the fourth deferred with its suite.
 #
 # The instrument this library replaces held its coverage as four gate keys, of which two were ruled
 # REQUIRED: that both stacks genuinely evaluated, and that perturbing an input moves the compared
@@ -7,8 +7,8 @@
 #
 # ★★ THREE OF FOUR, AND A GREEN HERE DOES NOT DISCHARGE THE FOURTH. The missing key is that a real,
 # domain-shaped tree flattens identically through both grammars. It is a property of a domain
-# corpus, and this library's fixtures are synthetic by ruling — so the key is not weakened, it is
-# owed by the instantiation that has a corpus. Saying so here is the difference between a deferral
+# suite, and this library's fixtures are synthetic by ruling — so the key is not weakened, it is
+# owed by the instantiation that has a suite. Saying so here is the difference between a deferral
 # and a shortfall nobody wrote down.
 {
   nixpkgsLib,

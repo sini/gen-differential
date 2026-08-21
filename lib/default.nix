@@ -33,7 +33,7 @@ let
   register = import ./register.nix;
   observables = import ./observables.nix;
   compare = import ./compare.nix { inherit contract diff register; };
-  corpus = import ./corpus.nix { inherit contract observables; };
+  suite = import ./suite.nix { inherit contract observables; };
   oracles = import ./oracles.nix { inherit compare diff; };
 in
 {
@@ -43,7 +43,7 @@ in
     contract
     compare
     register
-    corpus
+    suite
     observables
     oracles
     ;
@@ -61,7 +61,7 @@ in
     mkSeam
     mkSubject
     mkFixture
-    mkCorpusEntry
+    mkSuiteEntry
     ;
   inherit (compare) mkSuite;
 }
