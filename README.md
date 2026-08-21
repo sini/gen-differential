@@ -1,6 +1,6 @@
 # gen-differential — comparison machinery for a differential test
 
-[![CI](https://github.com/sini/gen-differential/actions/workflows/ci.yml/badge.svg)](https://github.com/sini/gen-differential/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-pink?logo=github)](https://github.com/sponsors/sini)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-pink?logo=github)](https://github.com/sponsors/sini)
 
 > "Differential testing requires that two or more comparable systems be available to the tester."
 > — W. M. McKeeman, *Differential Testing for Software*, Digital Technical Journal **10**(1), 1998, pp. 100–107
@@ -328,6 +328,11 @@ Stated as obligations, so silence is not read as settlement.
   **unexercised**: the coordinate must exist for a ladder to be instantiated without re-opening the
   contract, and there is no domain rung here to exercise it against. It is the one declared input
   this library does not consume, and it is declared rather than silent for exactly that reason.
+- **The register's two ruled entries as live assertions.** The `cnf.classes` → `cnf.keySemantics`
+  rename and A-IDENT's path identity ship as **data with their rulings**, not as assertions: no
+  grammar carrying those coordinates ships here, and inventing one would assert what no primary
+  states. The register **machinery** is fully gated on synthetic entries; the two entries travel to
+  the instantiation that has a grammar.
 
 ## Theoretical foundations
 
