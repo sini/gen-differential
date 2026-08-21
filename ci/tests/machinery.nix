@@ -183,8 +183,8 @@ in
       expr = builtins.all (
         e:
         builtins.sort builtins.lessThan (builtins.attrNames e) == [
+          "comparison"
           "defaultParams"
-          "gate"
           "mk"
           "tier"
         ]

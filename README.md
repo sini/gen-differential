@@ -115,13 +115,18 @@ would be two programs compared and called one.
 ### The corpus entry
 
 ```nix
-corpusEntry = { mk; defaultParams; gate; tier; }
+corpusEntry = { mk; defaultParams; comparison; tier; }
 ```
 
 Construction-time arguments and comparison metadata are **different axes**, and the registry states
-both. The comparison kind appears on the fixture *and* on the entry; **the fixture governs**, and the
-entry's copy is metadata for a caller assembling a suite. The field keeps the registry's own name
-(`gate`) so the two are never mistaken for one value in two places.
+both. The comparison kind appears on the fixture *and* on the entry under **one name**; **the fixture
+governs**, and the entry's copy is the declared default — what the entry will produce without
+constructing it.
+
+**The shared name is safe by construction, not by convention.** Nothing on the comparison path reads
+the entry's field: a claim selects `fixture.comparison`, and an entry reaches a comparison only
+through `instantiate`, which yields a fixture. A second name to guard a precedence the code already
+enforces would earn nothing.
 
 ## Quick start
 

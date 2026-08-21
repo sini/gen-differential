@@ -254,24 +254,29 @@ let
   # has construction parameters.
   #
   # ★ PRECEDENCE, STATED RATHER THAN LEFT TO BE RE-DERIVED: the kind appears on both the fixture and
-  # the entry, and THE FIXTURE GOVERNS. The entry's `gate` is metadata for a caller assembling a
-  # suite — it says what the entry will produce without constructing it — and the constructed
-  # fixture's `comparison` is what a comparison actually reads. The field keeps the registry's own
-  # name (`gate`) rather than the fixture's, so the two are never mistaken for one value in two
-  # places.
+  # the entry under ONE name, and THE FIXTURE GOVERNS. The entry's `comparison` is the declared
+  # default — it says what the entry will produce without constructing it — and the constructed
+  # fixture's `comparison` is what a comparison actually reads.
+  #
+  # ★★ THE SHARED NAME IS SAFE BY CONSTRUCTION RATHER THAN BY CONVENTION, which is why the entry no
+  # longer spells it differently to protect the precedence. Nothing on the comparison path reads the
+  # entry's field at all: a claim selects `fixture.comparison`, and an entry reaches a comparison
+  # only through `instantiate`, which yields a fixture. The entry's copy is therefore unreachable
+  # from a cell, so the two could not be mistaken for one value in two places even by a reader who
+  # wanted to — and a second name to guard a precedence the code already enforces earns nothing.
   mkCorpusEntry =
     {
       mk,
       defaultParams,
-      gate,
+      comparison,
       tier,
     }:
     if !(builtins.isFunction mk) then
       refuse "corpusEntry.mk" "an entry constructs a fixture from parameters, so `mk` is a function"
     else if !(builtins.isAttrs defaultParams) then
       refuse "corpusEntry.defaultParams" "construction parameters are an attribute set, possibly empty"
-    else if !(builtins.elem gate comparisonKinds) then
-      refuse "corpusEntry.gate" "`${builtins.toString gate}' is not one of ${builtins.concatStringsSep ", " comparisonKinds}"
+    else if !(builtins.elem comparison comparisonKinds) then
+      refuse "corpusEntry.comparison" "`${builtins.toString comparison}' is not one of ${builtins.concatStringsSep ", " comparisonKinds}"
     else if !(isNonEmptyString tier) then
       refuse "corpusEntry.tier" "a tier names which suites may draw the entry; it cannot be empty"
     else
@@ -279,7 +284,7 @@ let
         inherit
           mk
           defaultParams
-          gate
+          comparison
           tier
           ;
       };

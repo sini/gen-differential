@@ -99,7 +99,7 @@ let
       ndecls = 20;
       layers = 2;
     };
-    gate = "value";
+    comparison = "value";
     tier = "core";
   };
 
@@ -130,7 +130,7 @@ let
         ];
       };
     defaultParams.tag = "0000000000000000000000000000000";
-    gate = "drvPath";
+    comparison = "drvPath";
     tier = "core";
   };
 
@@ -178,7 +178,7 @@ let
           ];
         };
       defaultParams = { };
-      gate = "value";
+      comparison = "value";
       tier = "ordered";
     };
 
@@ -195,7 +195,7 @@ let
           ];
         };
       defaultParams = { };
-      gate = "value";
+      comparison = "value";
       tier = "ordered";
     };
 
@@ -215,7 +215,7 @@ let
           ];
         };
       defaultParams = { };
-      gate = "value";
+      comparison = "value";
       tier = "core";
     };
 
@@ -238,7 +238,7 @@ let
           ];
         };
       defaultParams = { };
-      gate = "throws";
+      comparison = "throws";
       tier = "core";
     };
   };
