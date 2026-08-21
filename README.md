@@ -91,7 +91,7 @@ indistinguishable from `true`. The identity arm here is *the reference's own bod
 candidate's seam* — semantically the reference, structurally travelling the candidate's path. That
 is what makes a seeded perturbation of the substitution mechanism able to move it.
 
-`mkSuite` emits **both arms** for every fixture. There is no entry point that yields the candidate
+`mkRun` emits **both arms** for every fixture. There is no entry point that yields the candidate
 comparison alone, because an identity control a consumer may decline to call is one that will be
 declined.
 
@@ -152,15 +152,15 @@ let
     };
   };
 
-  suite = gd.mkSuite {
+  run = gd.mkRun {
     inherit subject;
     fixtures = builtins.mapAttrs (_: e: gd.contract.instantiate e { }) (gd.suite.ofTier "core");
   };
 in
-  suite.green            # the verdict
+  run.green            # the verdict
 ```
 
-Every cell in `suite.cells.<fixture>.<observable>` carries both `identity` and `candidate` claims.
+Every cell in `run.cells.<fixture>.<observable>` carries both `identity` and `candidate` claims.
 
 ## Comparison kinds
 
@@ -236,12 +236,12 @@ reference and the design under test; the identity arm must agree with the refere
 
 ## The oracles
 
-Shipped as library surface, not as this repository's private test helpers — a consumer's suite is
+Shipped as library surface, not as this repository's private test helpers — a consumer's run is
 where the vacuity will actually appear.
 
 | Oracle                                                     | Refuses                                                               |
 | ---------------------------------------------------------- | --------------------------------------------------------------------- |
-| `floor { suite; teeth; }`                                  | The three coverage-floor keys, asserted individually and in a rollup. |
+| `floor { run; teeth; }`                                    | The three coverage-floor keys, asserted individually and in a rollup. |
 | `mutationTeeth { arm; fixture; observableName; perturb; }` | A comparison that is measuring a constant.                            |
 | `inputConsumption { inputs; perturb; cells; }`             | A declared input **no cell reads at all**.                            |
 | `distinctSubjects [ … ]`                                   | One subject, or two sharing a seam.                                   |
@@ -249,7 +249,7 @@ where the vacuity will actually appear.
 
 **`both-evaluated` and `inputConsumption` catch different vacuities**, which is why the floor does not
 subsume the second. The first catches two arms agreeing *through a shared refusal*. The second
-catches a declared input nothing forces — a suite can pass every anti-vacuity key while every fixture
+catches a declared input nothing forces — a run can pass every anti-vacuity key while every fixture
 ignores the corpus it declares. That is not hypothetical: in a frozen apparatus in this project a
 corpus was passed into a suite's arguments and zero cells consumed it, so a full green was a genuine
 no-regression signal for the harness and said nothing whatever about the corpus.
@@ -266,7 +266,7 @@ to one option so a red names the rule rather than a region.
 
 Every entry declares the vocabulary **tier** it needs (`core`, or `ordered` for the ordering
 combinators). `gd.suite.ofTier` is how a candidate with a smaller published surface takes the
-fixtures it can actually run, instead of aborting on a missing attribute halfway through a suite.
+fixtures it can actually run, instead of aborting on a missing attribute halfway through a run.
 
 **The contract takes every tier; what ships is narrower than what the API can express.** That
 distinction is the whole point of parameterizing the comparison, and it is why a domain suite costs

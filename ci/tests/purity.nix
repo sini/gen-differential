@@ -122,7 +122,7 @@ in
     # instrument gains exactly one node, so no library can be built twice in one evaluation — once
     # as the instrument's dependency and once as the design under test.
     test-the-library-namespace-is-reachable-without-any-argument = {
-      expr = builtins.isAttrs genDifferential && genDifferential ? mkSuite;
+      expr = builtins.isAttrs genDifferential && genDifferential ? mkRun;
       expected = true;
     };
   };

@@ -14,7 +14,7 @@
 # THE CONJUNCT. A candidate-side divergence leaves the identity cell GREEN, because the reference
 # and its own body through the seam still agree. A reference-side divergence reddens the identity
 # cell too, because the reference itself moved. One bit, read off a cell that is already in the
-# suite, tells a reader which side to look at before they read a single value.
+# run, tells a reader which side to look at before they read a single value.
 {
   nixpkgsLib,
   nixpkgsSrc,
@@ -40,7 +40,7 @@ let
   fixtures.valueMeta = arms.entry "valueMeta" { };
 
   # P1 — the CANDIDATE moved. The reference is untouched.
-  candidateSeeded = gd.mkSuite {
+  candidateSeeded = gd.mkRun {
     subject = gd.mkSubject {
       inherit (arms) reference seam;
       candidate = drifted;
@@ -49,8 +49,8 @@ let
     inherit fixtures;
   };
 
-  # P2 — the REFERENCE moved. The candidate is the one the unseeded suite uses.
-  referenceSeeded = gd.mkSuite {
+  # P2 — the REFERENCE moved. The candidate is the one the unseeded run uses.
+  referenceSeeded = gd.mkRun {
     subject = gd.mkSubject {
       inherit (arms) seam;
       reference = drifted;
@@ -60,7 +60,7 @@ let
     inherit fixtures;
   };
 
-  cell = suite: which: suite.cells.valueMeta.thing.${which};
+  cell = run: which: run.cells.valueMeta.thing.${which};
 
   # ── THE ONE-SIDED-KEY CLASS, WITNESSED AT A COMPARISON CELL ─────────────────────────────────
   #
@@ -104,7 +104,7 @@ let
 
   keyCell =
     subject:
-    (gd.mkSuite {
+    (gd.mkRun {
       inherit subject;
       fixtures.keyFixture = keyFixture;
     }).cells.keyFixture.set.candidate;
@@ -168,7 +168,7 @@ in
     };
 
     # And each names the arms it compared, so "which side is `drifted`" is answerable without
-    # knowing how the suite was assembled.
+    # knowing how the run was assembled.
     test-each-red-names-the-arms-it-compared = {
       expr = [
         [
@@ -263,17 +263,17 @@ in
     # is green — so the two reds above are the extra key and not the fixture being broken.
     test-control-the-key-fixture-agrees-when-neither-arm-adds-the-key = {
       expr =
-        (gd.mkSuite {
+        (gd.mkRun {
           inherit (arms) subject;
           fixtures.keyFixture = keyFixture;
         }).cells.keyFixture.set.candidate.green;
       expected = true;
     };
 
-    # LIVE CONTROL, same instrument and same run: the unseeded suite's cell is green and its
+    # LIVE CONTROL, same instrument and same run: the unseeded run's cell is green and its
     # explanation says so. Without it every cell above is satisfied by a comparison stuck at red.
     test-control-the-unseeded-cell-is-green = {
-      expr = arms.suite.cells.valueMeta.thing.candidate.green;
+      expr = arms.run.cells.valueMeta.thing.candidate.green;
       expected = true;
     };
   };

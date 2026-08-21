@@ -74,18 +74,18 @@ in
         expectedError.msg = "fixture.modules";
       };
 
-      # A suite with no fixtures asserts nothing and reads green — the 0/0 false pass, refused at
+      # A run with no fixtures asserts nothing and reads green — the 0/0 false pass, refused at
       # the constructor rather than left for a reader to notice in a count.
-      test-empty-suite-refuses = {
-        expr = gd.mkSuite {
+      test-empty-run-refuses = {
+        expr = gd.mkRun {
           subject = null;
           fixtures = { };
         };
-        expectedError.msg = "suite.fixtures";
+        expectedError.msg = "run.fixtures";
       };
 
       # The seam is what makes the identity control non-vacuous; an unnamed one cannot be told from
-      # another subject's, which is how a suite ends up with one instantiation counted twice.
+      # another subject's, which is how a run ends up with one instantiation counted twice.
       test-empty-seam-name-refuses = {
         expr = gd.mkSeam {
           name = "";
@@ -203,7 +203,7 @@ in
       };
 
       # An input-consumption question with nothing declared has nothing to demonstrate, and
-      # answering `true` to it is how a suite reports coverage it does not have.
+      # answering `true` to it is how a run reports coverage it does not have.
       test-empty-input-set-refuses = {
         expr = gd.oracles.inputConsumption {
           inputs = { };
@@ -218,7 +218,7 @@ in
       # is a different defect wearing the same green.
       # ★ THE CONTROL FOR THE THREE CELLS ABOVE, and it is the one that matters most: a WELL-FORMED
       # subject still answers. Without it, all three are satisfied by a `mkSubject` that refuses
-      # every subject it is handed — which would redden the whole suite elsewhere, but would satisfy
+      # every subject it is handed — which would redden the whole run elsewhere, but would satisfy
       # these cells exactly as a correct implementation does.
       test-control-well-formed-subject-answers = {
         expr =

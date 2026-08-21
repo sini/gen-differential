@@ -30,7 +30,7 @@ let
   # ── TIERS ────────────────────────────────────────────────────────────────────────────────────
   # The tier names the VOCABULARY an entry needs, and it is read rather than decorative: a
   # candidate that implements the core surface but not the ordering combinators can draw the `core`
-  # tier and say so, instead of aborting on a missing attribute halfway through a suite.
+  # tier and say so, instead of aborting on a missing attribute halfway through a run.
   #
   # `core`    — mkOption · types.{str,int,attrsOf,listOf,submodule} · mkMerge · mkOverride ·
   #             mkIf · mkForce · mkDefault

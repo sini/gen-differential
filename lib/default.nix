@@ -63,5 +63,5 @@ in
     mkFixture
     mkSuiteEntry
     ;
-  inherit (compare) mkSuite;
+  inherit (compare) mkRun;
 }

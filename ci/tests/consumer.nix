@@ -21,13 +21,13 @@ let
   consumer = import ./_consumer.nix { inherit nixpkgsLib genMerge genDifferential; };
 
   claimsOf =
-    which: suite:
+    which: run:
     builtins.concatMap (fx: map (p: p.${which}) (builtins.attrValues fx)) (
-      builtins.attrValues suite.cells
+      builtins.attrValues run.cells
     );
 
   greenMap =
-    which: suite: builtins.mapAttrs (_: ps: builtins.mapAttrs (_: a: a.${which}.green) ps) suite.cells;
+    which: run: builtins.mapAttrs (_: ps: builtins.mapAttrs (_: a: a.${which}.green) ps) run.cells;
 
   # ── THE SEED ─────────────────────────────────────────────────────────────────────────────────
   # An adapter that drops one declared option from the normalized result. It is installed at the
@@ -58,7 +58,7 @@ let
     };
   };
 
-  seededSuite = gd.mkSuite {
+  seededRun = gd.mkRun {
     subject = seededSubject;
     inherit (consumer) fixtures;
   };
@@ -67,13 +67,13 @@ in
   flake.tests.consumer = {
     # ── THE DIFFERENTIAL ─────────────────────────────────────────────────────────────────────
     test-candidate-agrees-with-the-reference-on-every-core-fixture = {
-      expr = builtins.all (c: c.green) (claimsOf "candidate" consumer.suite);
+      expr = builtins.all (c: c.green) (claimsOf "candidate" consumer.run);
       expected = true;
     };
 
     # The identity control for THIS subject, green in the same run: the adapter is invisible.
     test-identity-control-is-green = {
-      expr = builtins.all (c: c.green) (claimsOf "identity" consumer.suite);
+      expr = builtins.all (c: c.green) (claimsOf "identity" consumer.run);
       expected = true;
     };
 
@@ -82,13 +82,13 @@ in
     test-every-cell-carries-its-anti-vacuity-key = {
       expr = builtins.all (
         c: if c.comparison == "throws" then c.bothRefused == true else c.bothEvaluated == true
-      ) (claimsOf "candidate" consumer.suite);
+      ) (claimsOf "candidate" consumer.run);
       expected = true;
     };
 
     # ★ WHICH FIXTURES RAN, ASSERTED AS A SET RATHER THAN A COUNT. The candidate does not publish
     # the ordering combinators, so the two `ordered`-tier fixtures are absent BY DECLARATION. A
-    # count would let a fixture disappear and the suite stay green.
+    # count would let a fixture disappear and the run stay green.
     test-tier-selection-is-exactly-the-core-entries = {
       expr = builtins.attrNames consumer.fixtures;
       expected = [
@@ -100,7 +100,7 @@ in
     };
 
     # ★★ AND THE FIXTURES IT CANNOT RUN ARE NAMED, NOT MERELY MISSING. This is the other half of the
-    # line above: a reader can see what was excluded and why, from the suite itself.
+    # line above: a reader can see what was excluded and why, from the run itself.
     test-ordered-tier-entries-are-excluded-by-declaration = {
       expr = builtins.attrNames (
         builtins.removeAttrs gd.suite.registry (builtins.attrNames consumer.coreEntries)
@@ -114,7 +114,7 @@ in
     # Every observable each fixture declares was measured — the claim names its observable, so an
     # observable quietly dropped would be visible here rather than absorbed into a total.
     test-every-declared-observable-was-measured = {
-      expr = greenMap "candidate" consumer.suite;
+      expr = greenMap "candidate" consumer.run;
       expected = {
         artifact.out = true;
         latticeThrows.n = true;
@@ -186,7 +186,7 @@ in
     #   decline, which is all a `tryEval`-shaped refusal reading can ever establish. Measured here
     #   rather than assumed: this cell is the record that the kind's domain is that narrow.
     test-control-seeded-adapter-reddens-exactly-this-partition = {
-      expr = greenMap "identity" seededSuite;
+      expr = greenMap "identity" seededRun;
       expected = {
         artifact.out = false;
         latticeThrows.n = true;
@@ -201,8 +201,8 @@ in
     # ★ AND THE RED IS ATTRIBUTABLE TO THE ADAPTER RATHER THAN TO THE ENGINE: the candidate arm is
     # routed through the seeded adapter too, so it moves as well — and the cell says which arms it
     # compared. A seed that reddened only one arm would leave the pair ambiguous.
-    test-control-seeded-adapter-is-visible-in-the-suite-rollup = {
-      expr = seededSuite.green;
+    test-control-seeded-adapter-is-visible-in-the-run-rollup = {
+      expr = seededRun.green;
       expected = false;
     };
   };

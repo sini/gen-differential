@@ -58,7 +58,7 @@ let
   };
 
   result = gd.oracles.floor {
-    inherit (arms) suite;
+    inherit (arms) run;
     teeth = teeth.moved;
   };
 in
@@ -110,7 +110,7 @@ in
 
     # ★★ THE ANTI-VACUITY KEY HAS TEETH OF ITS OWN. Two arms that agree by both REFUSING must fail
     # `both-evaluated` — that is the entire point of the key, and a floor that could not be shown to
-    # fail it would be reporting a constant. The suite below compares an arm against itself on a
+    # fail it would be reporting a constant. The run below compares an arm against itself on a
     # fixture whose observable does not exist, so both sides refuse and the values are equal.
     test-control-two-refusing-arms-fail-the-anti-vacuity-key = {
       expr =
@@ -130,13 +130,13 @@ in
               }
             ];
           };
-          suite = gd.mkSuite {
+          run = gd.mkRun {
             inherit (arms) subject;
             fixtures.missing = missing;
           };
         in
         (gd.oracles.floor {
-          inherit suite;
+          inherit run;
           teeth = true;
         })."both-evaluated";
       expected = false;
@@ -144,7 +144,7 @@ in
 
     # And the same construction is genuinely a mutual refusal rather than a crash — the arms did
     # decline, which is what makes the key's `false` the right answer instead of an accident.
-    test-control-the-refusing-suite-is-not-green = {
+    test-control-the-refusing-run-is-not-green = {
       expr =
         let
           missing = gd.mkFixture {
@@ -163,7 +163,7 @@ in
             ];
           };
         in
-        (gd.mkSuite {
+        (gd.mkRun {
           inherit (arms) subject;
           fixtures.missing = missing;
         }).green;

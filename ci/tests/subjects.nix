@@ -2,7 +2,7 @@
 #
 # ★★ THE DEFECT THIS GUARDS IS THE ONE THIS LIBRARY EXISTS TO REMOVE, REPRODUCED ONE LEVEL DOWN. A
 # harness parameterized against exactly one substrate is indistinguishable from one hard-coded to
-# it. So is a suite carrying exactly one subject — and so is a suite carrying two whose seams are
+# it. So is a run carrying exactly one subject — and so is a run carrying two whose seams are
 # the same value, because that is one instantiation counted twice.
 #
 # What a failing run looks like, stated before the run: one subject in the roster, or two sharing a

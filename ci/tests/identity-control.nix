@@ -18,15 +18,15 @@ let
   arms = import ./_arms.nix { inherit nixpkgsLib nixpkgsSrc genDifferential; };
 
   claimsOf =
-    which: suite:
+    which: run:
     builtins.concatMap (fx: map (p: p.${which}) (builtins.attrValues fx)) (
-      builtins.attrValues suite.cells
+      builtins.attrValues run.cells
     );
 
   # A flat `<fixture>.<observable>` → green reading, which is what makes a seeded partition
   # assertable as a VALUE rather than as a count. A count would hide which cell moved.
   greenMap =
-    which: suite: builtins.mapAttrs (_: ps: builtins.mapAttrs (_: a: a.${which}.green) ps) suite.cells;
+    which: run: builtins.mapAttrs (_: ps: builtins.mapAttrs (_: a: a.${which}.green) ps) run.cells;
 
   # ── THE SEED ─────────────────────────────────────────────────────────────────────────────────
   # A substitution mechanism that DROPS ONE MODULE from every evaluation. It is installed at the
@@ -53,9 +53,9 @@ let
     in
     arms.armOf "SEEDED-${body.name}" elib;
 
-  seededSuite =
+  seededRun =
     label: drop:
-    gd.mkSuite {
+    gd.mkRun {
       subject = gd.mkSubject {
         inherit (arms.subject) reference candidate claim;
         seam = gd.mkSeam {
@@ -76,15 +76,15 @@ let
     else
       ms;
 
-  lastSeed = seededSuite "drop-last" dropLast;
-  thirdSeed = seededSuite "drop-third" dropThird;
+  lastSeed = seededRun "drop-last" dropLast;
+  thirdSeed = seededRun "drop-third" dropThird;
 in
 {
   flake.tests.identity-control = {
     # The control passes: routing the reference's own body through the candidate's seam changes
     # nothing any fixture can see, at any observable.
     test-identity-arm-agrees-with-the-reference-on-every-fixture = {
-      expr = builtins.all (c: c.green) (claimsOf "identity" arms.suite);
+      expr = builtins.all (c: c.green) (claimsOf "identity" arms.run);
       expected = true;
     };
 
@@ -93,7 +93,7 @@ in
     test-identity-cells-carry-their-anti-vacuity-key = {
       expr = builtins.all (
         c: if c.comparison == "throws" then c.bothRefused == true else c.bothEvaluated == true
-      ) (claimsOf "identity" arms.suite);
+      ) (claimsOf "identity" arms.run);
       expected = true;
     };
 
@@ -122,7 +122,7 @@ in
       };
     };
 
-    # ★ AND THE ONE SURVIVOR IS REACHABLE, so no cell in this suite is left undemonstrated. Dropping
+    # ★ AND THE ONE SURVIVOR IS REACHABLE, so no cell in this run is left undemonstrated. Dropping
     # the WINNING definition instead moves it, which is the same fixture answering a perturbation
     # its observable can see.
     test-control-seeded-drop-third-reddens-the-surviving-cell = {
@@ -138,9 +138,9 @@ in
       expected = true;
     };
 
-    # The suite's own rollup agrees with the cells, so a consumer reading only `green` reads the
+    # The run's own rollup agrees with the cells, so a consumer reading only `green` reads the
     # same fact the cells carry.
-    test-control-seeded-suite-is-not-green = {
+    test-control-seeded-run-is-not-green = {
       expr = lastSeed.green;
       expected = false;
     };

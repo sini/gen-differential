@@ -1,4 +1,4 @@
-# EVERY DECLARED INPUT OF A SUITE HAS AT LEAST ONE CONSUMING CELL.
+# EVERY DECLARED INPUT OF A RUN HAS AT LEAST ONE CONSUMING CELL.
 #
 # ★★★ THE MEASURED FAILURE THIS EXISTS FOR: in a frozen apparatus in this project, a corpus was
 # passed into a suite's arguments and ZERO tests consumed it. Every cell passed. The full green was
@@ -7,7 +7,7 @@
 #
 # ★★ IT IS A DISTINCT VACUITY FROM THE FLOOR'S ANTI-VACUITY KEY, WHICH IS WHY THE FLOOR DOES NOT
 # ALREADY COVER IT. `both-evaluated` catches two arms agreeing through a shared refusal. This
-# catches a declared input no cell reads at all — a suite can pass every anti-vacuity key while
+# catches a declared input no cell reads at all — a run can pass every anti-vacuity key while
 # every fixture ignores the corpus it declares.
 #
 # The demonstration is by PERTURBATION, never by a syntactic reachability reading: an input is
@@ -22,7 +22,7 @@ let
   gd = genDifferential;
   arms = import ./_arms.nix { inherit nixpkgsLib nixpkgsSrc genDifferential; };
 
-  # A suite's declared inputs, as values.
+  # A run's declared inputs, as values.
   inputs = {
     elements = 6;
     tag = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
@@ -54,7 +54,7 @@ let
     );
   };
 
-  # ★ THE SAME SUITE WITH ONE INPUT NOTHING READS — the exact silhouette the measured failure had.
+  # ★ THE SAME RUN WITH ONE INPUT NOTHING READS — the exact silhouette the measured failure had.
   inputsWithDead = inputs // {
     corpus = "a value no cell forces";
   };
@@ -87,7 +87,7 @@ in
       expected = [ ];
     };
 
-    # ★★ THE SEEDED FAILURE — a declared input no cell reads. The suite is otherwise identical and
+    # ★★ THE SEEDED FAILURE — a declared input no cell reads. The run is otherwise identical and
     # every one of its cells still passes; only this oracle can see the difference.
     test-control-an-unread-declared-input-is-caught = {
       expr = vacuous.total;

@@ -34,9 +34,9 @@ let
     ruling = "test ruling 2026-01-01 — the extra element is authorized";
   };
 
-  suiteWith =
+  runWith =
     candidate: register:
-    gd.mkSuite {
+    gd.mkRun {
       subject = gd.mkSubject {
         inherit (arms) reference seam;
         inherit candidate;
@@ -45,12 +45,12 @@ let
       inherit fixtures register;
     };
 
-  cellOf = suite: suite.cells.valueMeta.thing.candidate;
+  cellOf = run: run.cells.valueMeta.thing.candidate;
 
-  registered = cellOf (suiteWith drifted [ entry ]);
-  unregisteredCase = cellOf (suiteWith drifted [ ]);
+  registered = cellOf (runWith drifted [ entry ]);
+  unregisteredCase = cellOf (runWith drifted [ ]);
   # The divergence STOPS OCCURRING while the entry remains: the register has gone stale.
-  staleCase = cellOf (suiteWith arms.subject.candidate [ entry ]);
+  staleCase = cellOf (runWith arms.subject.candidate [ entry ]);
 in
 {
   flake.tests.register = {
@@ -91,7 +91,7 @@ in
     };
 
     # ★ AND THE STALE CASE IS RED FOR THE RIGHT REASON: there is no unregistered divergence to blame
-    # it on. Without this the cell above would pass for a suite that simply diverged elsewhere.
+    # it on. Without this the cell above would pass for a run that simply diverged elsewhere.
     test-control-the-stale-case-has-no-unregistered-divergence = {
       expr = staleCase.unregistered;
       expected = [ ];
@@ -103,7 +103,7 @@ in
       expr =
         let
           wrong = cellOf (
-            suiteWith drifted [
+            runWith drifted [
               (gd.register.mkEntry {
                 path = [ "length" ];
                 values = {
@@ -131,14 +131,14 @@ in
     # outright. Applying the register there would leave every entry unsatisfied on every identity
     # cell — the register asserting against the wrong pair.
     test-the-identity-cell-is-unaffected-by-the-register = {
-      expr = (suiteWith drifted [ entry ]).cells.valueMeta.thing.identity.green;
+      expr = (runWith drifted [ entry ]).cells.valueMeta.thing.identity.green;
       expected = true;
     };
 
     test-the-identity-cell-carries-no-register-entries = {
       expr = [
-        (suiteWith drifted [ entry ]).cells.valueMeta.thing.identity.missing
-        (suiteWith drifted [ entry ]).cells.valueMeta.thing.identity.registered
+        (runWith drifted [ entry ]).cells.valueMeta.thing.identity.missing
+        (runWith drifted [ entry ]).cells.valueMeta.thing.identity.registered
       ];
       expected = [
         [ ]

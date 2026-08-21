@@ -1,4 +1,4 @@
-# THE COMPARISON — the kinds, the claim record, and the suite constructor.
+# THE COMPARISON — the kinds, the claim record, and the run constructor.
 #
 # "If a single test is fed to several comparable programs (for example, several C compilers), and
 # one program gives a different result, a bug may have been exposed" (McKeeman 1998, DTJ 10(1),
@@ -6,7 +6,7 @@
 #
 # ★★ THE CONSTRUCTOR EMITS BOTH ARMS. There is no entry point that yields the candidate comparison
 # alone, because an identity control a consumer may decline to call is a control that will be
-# declined. `mkSuite` derives the identity arm from the subject's seam and emits it beside every
+# declined. `mkRun` derives the identity arm from the subject's seam and emits it beside every
 # candidate cell.
 {
   contract,
@@ -17,7 +17,7 @@ let
   refuse = what: why: throw "gen-differential: ${what} — ${why}";
 
   # Bound before the field of the same name shadows the module: `register` is a CONTRACT FIELD on a
-  # suite and a claim, and it is also this concern's namespace. The alias keeps both spellings
+  # run and a claim, and it is also this concern's namespace. The alias keeps both spellings
   # honest instead of renaming the contract field to protect an import.
   applyRegister = register.apply;
 
@@ -75,7 +75,7 @@ let
       # selecting `.drvPath` off an observable that has none takes the whole gate down instead of
       # failing one cell — the exact class this ecosystem keeps a second test output for. Measured
       # here: a seeded run whose observable stopped yielding a derivation-shaped value crashed the
-      # suite rather than reddening the cell. Testing presence first turns an uncatchable abort into
+      # run rather than reddening the cell. Testing presence first turns an uncatchable abort into
       # a catchable refusal, so the cell can carry its own failure.
       compare =
         {
@@ -218,21 +218,21 @@ in
 rec {
   inherit run kinds claim;
 
-  # ── THE SUITE ────────────────────────────────────────────────────────────────────────────────
+  # ── THE RUN ──────────────────────────────────────────────────────────────────────────────────
   #
   # ★ THE REGISTER APPLIES TO THE CANDIDATE ARM ONLY, and the asymmetry is load-bearing. A register
   # entry authorizes a difference between the REFERENCE and the DESIGN UNDER TEST. The identity arm
   # is the reference's own body travelling the candidate's seam, so it must agree with the reference
   # outright: applying the register there would leave every entry `missing` on every identity cell,
   # which is the register asserting against the wrong pair.
-  mkSuite =
+  mkRun =
     {
       subject,
       fixtures,
       register ? [ ],
     }:
     if !(builtins.isAttrs fixtures) || fixtures == { } then
-      refuse "suite.fixtures" "a suite with no fixtures asserts nothing and reads green"
+      refuse "run.fixtures" "a run with no fixtures asserts nothing and reads green"
     else
       let
         arms = contract.armsOf subject;

@@ -96,7 +96,7 @@ let
   };
 
   # ── FIXTURES ─────────────────────────────────────────────────────────────────────────────────
-  # The registry's declared defaults are the apparatus's; the suite instantiates smaller so a full
+  # The registry's declared defaults are the apparatus's; the run instantiates smaller so a full
   # run stays a test rather than a benchmark. That the two can differ is what `defaultParams` is
   # for — construction arguments and comparison metadata are different axes.
   entry = name: params: gd.contract.instantiate gd.suite.registry.${name} params;
@@ -114,7 +114,7 @@ let
     latticeThrows = entry "latticeThrows" { };
   };
 
-  suite = gd.mkSuite { inherit subject fixtures; };
+  run = gd.mkRun { inherit subject fixtures; };
 in
 {
   inherit
@@ -128,6 +128,6 @@ in
     subject
     entry
     fixtures
-    suite
+    run
     ;
 }

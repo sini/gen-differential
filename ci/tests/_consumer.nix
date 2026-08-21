@@ -127,7 +127,7 @@ let
     )
   ) coreEntries;
 
-  suite = gd.mkSuite { inherit subject fixtures; };
+  run = gd.mkRun { inherit subject fixtures; };
 in
 {
   inherit
@@ -141,6 +141,6 @@ in
     subject
     coreEntries
     fixtures
-    suite
+    run
     ;
 }

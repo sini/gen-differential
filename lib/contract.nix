@@ -90,7 +90,7 @@ let
     else if !((v ? name) && isNonEmptyString v.name) then
       {
         field = ".name";
-        why = "a seam's name is its identity; two subjects sharing a seam name is a suite with one seam";
+        why = "a seam's name is its identity; two subjects sharing a seam name is a run with one seam";
       }
     else if !((v ? install) && builtins.isFunction v.install) then
       {
@@ -252,7 +252,7 @@ let
           ;
       };
 
-  # ── (c) THE SUITE ENTRY — the registry shape, adopted rather than redesigned ────────────────
+  # ── (c) THE SUITE ENTRY — the registry shape, adopted rather than redesigned ─────────────────
   #
   # `defaultParams` stays because CONSTRUCTION-TIME ARGUMENTS AND COMPARISON METADATA ARE DIFFERENT
   # AXES and a registry has to state both: an entry whose `mk` needs an argument the registry
@@ -284,7 +284,7 @@ let
     else if !(builtins.elem comparison comparisonKinds) then
       refuse "suiteEntry.comparison" "`${builtins.toString comparison}' is not one of ${builtins.concatStringsSep ", " comparisonKinds}"
     else if !(isNonEmptyString tier) then
-      refuse "suiteEntry.tier" "a tier names the vocabulary an entry needs, so a caller draws only what its arm can actually run; it cannot be empty"
+      refuse "suiteEntry.tier" "a tier names which runs may draw the entry; it cannot be empty"
     else
       {
         inherit

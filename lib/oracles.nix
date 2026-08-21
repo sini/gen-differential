@@ -3,7 +3,7 @@
 #
 # ★★ A HARNESS THAT CANNOT BE SHOWN TO FAIL IS INDISTINGUISHABLE FROM `true`. Every function here
 # exists because some green is reachable without asserting anything, and each names the specific
-# way. They ship on the public surface because a CONSUMER's suite is where the vacuity will
+# way. They ship on the public surface because a CONSUMER's run is where the vacuity will
 # actually appear: a library that keeps its own teeth private hands out the harness and keeps the
 # reason it is trustworthy.
 { compare, diff }:
@@ -25,15 +25,15 @@ let
   ];
 
   floor =
-    { suite, teeth }:
+    { run, teeth }:
     let
       anti = c: if c.comparison == "throws" then c.bothRefused == true else c.bothEvaluated == true;
       keys = {
         # Every cell's observable agrees with its reference, or diverges exactly as ruled.
-        "all-identical" = builtins.all (c: c.unregistered == [ ] && c.missing == [ ]) suite.allClaims;
+        "all-identical" = builtins.all (c: c.unregistered == [ ] && c.missing == [ ]) run.allClaims;
         # THE ANTI-VACUITY KEY: both stacks genuinely produced something. Two arms that agree
         # through a shared refusal have not been shown to agree about anything else.
-        "both-evaluated" = suite.allClaims != [ ] && builtins.all anti suite.allClaims;
+        "both-evaluated" = run.allClaims != [ ] && builtins.all anti run.allClaims;
         # THE TEETH: perturbing an input moves the compared observable. Without it a comparison can
         # be measuring a constant.
         "teeth-mutation-diverges" = teeth;
@@ -77,7 +77,7 @@ let
   #
   # ★ A DISTINCT VACUITY FROM THE FLOOR'S ANTI-VACUITY KEY, WHICH IS WHY THE FLOOR DOES NOT ALREADY
   # COVER IT. `both-evaluated` catches two arms agreeing through a shared refusal. This catches a
-  # declared input NO CELL READS AT ALL — a suite can pass every anti-vacuity key while every
+  # declared input NO CELL READS AT ALL — a run can pass every anti-vacuity key while every
   # fixture ignores the corpus it declares. Measured in a frozen apparatus in this project: a
   # corpus was passed into `specialArgs` and zero tests consumed it, so a full green was a genuine
   # no-regression signal for the harness and said nothing whatever about the corpus.
@@ -124,7 +124,7 @@ let
   #
   # ★ THE DEFECT THIS GUARDS IS THE ONE THIS LIBRARY EXISTS TO FIX, ONE LEVEL DOWN. A harness
   # parameterized against exactly one substrate is indistinguishable from one hard-coded to it —
-  # and so is a suite carrying exactly one subject, or two whose seams are the same. The seam is
+  # and so is a run carrying exactly one subject, or two whose seams are the same. The seam is
   # the field that decides it, which is why it carries a name: two subjects sharing a seam name are
   # one instantiation counted twice.
   distinctSubjects =
