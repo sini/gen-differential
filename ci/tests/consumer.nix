@@ -34,7 +34,7 @@ let
   # same seam, so it reaches the identity arm — and the claim it falsifies is the one this seam
   # exists to make: that the adapter does not change the answer.
   seededSubject = gd.mkSubject {
-    inherit (consumer.subject) reference candidate proposition;
+    inherit (consumer.subject) reference candidate claim;
     seam = gd.mkSeam {
       name = "module-system-surface@SEEDED";
       inherit (consumer) referenceBody;
@@ -182,7 +182,7 @@ in
     # ★★ `latticeThrows.n` survives because the `throws` kind asserts MUTUAL REFUSAL AND NOT A
     #   SHARED CAUSE. The unseeded arm refuses on the merge conflict the fixture is about; the
     #   seeded arm refuses because the adapter removed the attribute the projection reads. Both
-    #   refuse, so the claim holds — and it should, because the kind's proposition is that both arms
+    #   refuse, so the claim holds — and it should, because the kind asserts only that both arms
     #   decline, which is all a `tryEval`-shaped refusal reading can ever establish. Measured here
     #   rather than assumed: this cell is the record that the kind's domain is that narrow.
     test-control-seeded-adapter-reddens-exactly-this-partition = {

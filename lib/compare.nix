@@ -131,8 +131,8 @@ let
       # nothing else, so two arms that decline for entirely unrelated reasons satisfy this kind.
       # Measured in this repository's own suite: an arm perturbed so that the projected attribute no
       # longer exists still refuses, and the cell stays green — correctly, because "both decline" is
-      # the whole proposition. A claim that the two REFUSED THE SAME WAY needs a comparison of the
-      # refusals, which this reading cannot supply.
+      # the whole of what is claimed. Asserting that the two REFUSED THE SAME WAY needs a comparison
+      # of the refusals, which this reading cannot supply.
       compare =
         {
           a,
@@ -166,11 +166,16 @@ let
   # ── THE CLAIM ────────────────────────────────────────────────────────────────────────────────
   #
   # Every field a red needs to be readable WITHOUT an operator who already knows what was seeded:
-  # which proposition, which pair of arms, which projection, what was asserted, and where the two
-  # first parted company.
+  # which claim, which pair of arms, which projection, what was asserted, and where the two first
+  # parted company.
+  #
+  # The record is a claim and it CARRIES the claim it belongs to, so the field shadows this
+  # constructor inside the body below — harmlessly, because nothing here is recursive. It is the
+  # same shape as `applyRegister` above and is noted for the same reason: a reader who later reaches
+  # for `claim` in this scope is reaching for the string, not the function.
   claim =
     {
-      proposition,
+      claim,
       arms,
       fixture,
       projectionName,
@@ -193,7 +198,7 @@ let
     in
     raw
     // {
-      inherit proposition arms projectionName;
+      inherit claim arms projectionName;
       inherit (fixture) comparison rung;
       inherit (kind) assertion;
       referenceArm = a.name;
@@ -237,7 +242,7 @@ rec {
             projectionName: _:
             let
               common = {
-                inherit (subject) proposition;
+                inherit (subject) claim;
                 inherit fixture projectionName;
                 a = arms.reference;
               };
@@ -270,7 +275,7 @@ rec {
       in
       {
         inherit cells allClaims;
-        inherit (subject) proposition;
+        inherit (subject) claim;
         seam = subject.seam.name;
         green = builtins.all (c: c.green) allClaims;
       };

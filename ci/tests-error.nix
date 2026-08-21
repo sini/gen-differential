@@ -30,16 +30,16 @@ in
     # says so BY NAME. A field that is "required" because a missing attribute happens to abort has
     # a message about attribute lookup; these have messages about the design.
     flake.testsError.contract-refusals = {
-      # An unnamed claim is the conjunction defect: a red that cannot say which proposition it
+      # An unnamed claim is the conjunction defect: a red that cannot say which claim it
       # belongs to is the failure that retired the predecessor apparatus.
-      test-empty-proposition-refuses = {
+      test-empty-claim-refuses = {
         expr = gd.mkSubject {
           reference = null;
           candidate = null;
           seam = null;
-          proposition = "";
+          claim = "";
         };
-        expectedError.msg = "subject.proposition";
+        expectedError.msg = "subject.claim";
       };
 
       # An empty projection set compares nothing and reads green — the exact vacuity a projection
@@ -128,7 +128,7 @@ in
             eval = _: { };
           };
           seam = null;
-          proposition = "p";
+          claim = "p";
         };
         expectedError.msg = "subject.seam";
       };
@@ -146,7 +146,7 @@ in
             install = b: b;
             referenceBody = { };
           };
-          proposition = "p";
+          claim = "p";
         };
         expectedError.msg = "subject.reference";
       };
@@ -171,7 +171,7 @@ in
             install = b: b;
             referenceBody = { };
           };
-          proposition = "p";
+          claim = "p";
         };
         expectedError.msg = "subject.candidate.eval";
       };
@@ -238,8 +238,8 @@ in
               install = b: b;
               referenceBody = "REF-BODY";
             };
-            proposition = "p";
-          }).proposition;
+            claim = "p";
+          }).claim;
         expected = "p";
       };
 

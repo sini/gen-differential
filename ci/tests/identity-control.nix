@@ -57,7 +57,7 @@ let
     label: drop:
     gd.mkSuite {
       subject = gd.mkSubject {
-        inherit (arms.subject) reference candidate proposition;
+        inherit (arms.subject) reference candidate claim;
         seam = gd.mkSeam {
           name = "lib-extend-module-body@SEEDED-${label}";
           install = seededInstall drop;

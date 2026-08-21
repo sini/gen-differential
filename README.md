@@ -6,7 +6,7 @@
 > — W. M. McKeeman, *Differential Testing for Software*, Digital Technical Journal **10**(1), 1998, pp. 100–107
 
 `gen-differential` is the machinery for asserting that two implementations agree: a parameterized
-**subject**, a **seam-routed identity control**, a required **proposition** on every claim, a
+**subject**, a **seam-routed identity control**, a required **claim** on every comparison, a
 **projection set** per fixture, a **divergence register** that asserts rather than mutes, and the
 **oracles** that keep a green from being vacuous.
 
@@ -37,7 +37,7 @@ A claim about an implementation's **internal correctness** is provable against t
 own suites. A claim that it **agrees with an external interface** is not — because the external
 interface is not yours to define. Every parity-shaped instrument that compares a system against
 *itself* (an optimization against its own unoptimized path, a warm evaluation against a cold one)
-answers a different question, however similar the shape. Same shape, different proposition.
+answers a different question, however similar the shape. Same shape, different claim.
 
 McKeeman's framing is comparison-as-oracle: divergence between comparable implementations on the
 same input is the bug signal, substituting for a priori knowledge of the right answer. The section
@@ -52,10 +52,10 @@ so nothing here is defaulted into existence.
 
 ```nix
 subject = {
-  reference;    # REQUIRED — the arm the claim is measured against
-  candidate;    # REQUIRED — the design under test
-  seam;         # REQUIRED — the substitution point at which candidate replaces reference
-  proposition;  # REQUIRED — the named claim this pairing asserts
+  reference;  # REQUIRED — the arm the claim is measured against
+  candidate;  # REQUIRED — the design under test
+  seam;       # REQUIRED — the substitution point at which candidate replaces reference
+  claim;      # REQUIRED — the named assertion this pairing makes
 }
 ```
 
@@ -64,7 +64,7 @@ analyzer distinguishes the implementation under test from the *comparison* imple
 discards a test when a comparison implementation misbehaves, "since reporting the bugs of a
 comparison compiler is not a testing objective".
 
-**`proposition` is required because a red that cannot name its claim is the defect that retires
+**`claim` is required because a red that cannot name what it asserts is the defect that retires
 parity harnesses.** The predecessor of this library silently asserted a conjunction — that the
 re-host computes what the reference computes, *and* that the published grammar had not moved — with
 its reference side frozen so it could never follow. It went red on every deliberate grammar change
@@ -142,10 +142,10 @@ let
   };
 
   subject = gd.mkSubject {
-    proposition = "P1 · the engine computes what the reference computes on the shared grammar";
-    reference   = mkArmFor "reference" referenceLib;
-    candidate   = install candidateImpl;
-    seam        = gd.mkSeam {
+    claim     = "P1 · the engine computes what the reference computes on the shared grammar";
+    reference = mkArmFor "reference" referenceLib;
+    candidate = install candidateImpl;
+    seam      = gd.mkSeam {
       name = "module-system-surface";
       inherit install;
       referenceBody = referenceImpl;
@@ -355,7 +355,7 @@ fixtures. The paper's own counterweight — it applies the term to "ad hoc diffe
 generated-input arm, with test reduction as its natural companion, is recorded future work and is the
 condition under which the narrowing retires.
 
-**Construct names are placeholders under a standing quarantine.** `subject`, `seam`, `proposition`,
+**Construct names are placeholders under a standing quarantine.** `subject`, `seam`, `claim`,
 `projections` and the divergence register are named by specification and not by a verified primary;
 McKeeman grounds the mechanism and the reference/candidate asymmetry, and grounds none of those
 identifiers. They resolve at their own primaries or as ruled namings, and until then a rename is

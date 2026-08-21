@@ -6,7 +6,7 @@
 #
 # Domain-free by construction: this layer knows two operands, `a` and `b`, and nothing about which
 # of them is the reference. That mapping is made one layer up (compare.nix), which is also the layer
-# that knows a proposition. Keeping the asymmetry out of here is what lets the same walk serve the
+# that knows a claim. Keeping the asymmetry out of here is what lets the same walk serve the
 # identity arm and the candidate arm without a second implementation.
 let
   # deepSeq to a fixpoint of itself: force the whole structure, yield the structure.

@@ -144,7 +144,7 @@ let
     {
       inherit count seams;
       distinctSeams = builtins.length unique;
-      propositions = map (s: s.proposition) subjects;
+      claims = map (s: s.claim) subjects;
       ok = count >= 2 && builtins.length unique == count;
     };
 
@@ -157,7 +157,7 @@ let
     c:
     "${
       if c.green then "green" else "RED"
-    }: ${c.proposition} | arms ${c.arms} (${c.referenceArm} vs ${c.candidateArm}) | ${c.comparison}/${c.assertion} at projection ${c.projectionName}"
+    }: ${c.claim} | arms ${c.arms} (${c.referenceArm} vs ${c.candidateArm}) | ${c.comparison}/${c.assertion} at projection ${c.projectionName}"
     + (if c.rung == null then "" else " | rung ${builtins.toString c.rung}")
     + (
       if c.firstDivergence == null then

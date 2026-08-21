@@ -92,7 +92,7 @@ let
   subject = gd.mkSubject {
     inherit reference seam;
     candidate = install rehostBody;
-    proposition = "P1 · the module body re-imported against an extended utility fixpoint computes what the reference computes";
+    claim = "P1 · the module body re-imported against an extended utility fixpoint computes what the reference computes";
   };
 
   # ── FIXTURES ─────────────────────────────────────────────────────────────────────────────────

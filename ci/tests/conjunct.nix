@@ -44,7 +44,7 @@ let
     subject = gd.mkSubject {
       inherit (arms) reference seam;
       candidate = drifted;
-      proposition = "P1 · the design under test computes what the reference computes";
+      claim = "P1 · the design under test computes what the reference computes";
     };
     inherit fixtures;
   };
@@ -55,7 +55,7 @@ let
       inherit (arms) seam;
       reference = drifted;
       inherit (arms.subject) candidate;
-      proposition = "P2 · the published grammar is unchanged since the claim was last measured";
+      claim = "P2 · the published grammar is unchanged since the claim was last measured";
     };
     inherit fixtures;
   };
@@ -113,7 +113,7 @@ let
     gd.mkSubject {
       inherit (arms) reference seam;
       candidate = armAdding "candidate-declares-extra";
-      proposition = "P1 · the design under test computes what the reference computes";
+      claim = "P1 · the design under test computes what the reference computes";
     }
   );
 
@@ -122,7 +122,7 @@ let
       inherit (arms) seam;
       reference = armAdding "reference-declares-extra";
       inherit (arms.subject) candidate;
-      proposition = "P2 · the published grammar is unchanged since the claim was last measured";
+      claim = "P2 · the published grammar is unchanged since the claim was last measured";
     }
   );
 in
@@ -155,11 +155,11 @@ in
     };
 
     # ── THE FAILURE OUTPUT ALONE ─────────────────────────────────────────────────────────────
-    # Each red carries the proposition it belongs to, so the two conjuncts are never one red.
-    test-each-red-carries-its-own-proposition = {
+    # Each red carries the claim it belongs to, so the two conjuncts are never one red.
+    test-each-red-carries-its-own-claim = {
       expr = [
-        (cell candidateSeeded "candidate").proposition
-        (cell referenceSeeded "candidate").proposition
+        (cell candidateSeeded "candidate").claim
+        (cell referenceSeeded "candidate").claim
       ];
       expected = [
         "P1 · the design under test computes what the reference computes"

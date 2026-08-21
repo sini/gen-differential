@@ -14,7 +14,7 @@
 # work and is the condition under which the narrowing retires.
 #
 # ★★ WHAT THIS LIBRARY IS AND IS NOT. It is the machinery: the parameterized subject, the
-# seam-routed identity control, the required proposition, the projection set, the divergence
+# seam-routed identity control, the required claim, the projection set, the divergence
 # register, and the oracles that keep a green from being vacuous. It is NOT an instantiation. A
 # green here says the machinery works; it does not say any particular design agrees with any
 # particular reference, because both arms arrive as arguments and this library ships neither.

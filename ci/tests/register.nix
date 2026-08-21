@@ -40,7 +40,7 @@ let
       subject = gd.mkSubject {
         inherit (arms) reference seam;
         inherit candidate;
-        proposition = "P1 · the design under test computes what the reference computes, modulo ruled divergences";
+        claim = "P1 · the design under test computes what the reference computes, modulo ruled divergences";
       };
       inherit fixtures register;
     };

@@ -21,7 +21,7 @@ let
 
   # THE ROSTER. Two genuinely different instantiations, not one subject and a filler: a re-host of
   # the reference's own module body through a fixpoint extension, and a from-scratch merge engine
-  # behind a surface adapter. Different candidates, different seams, different propositions.
+  # behind a surface adapter. Different candidates, different seams, different claims.
   roster = [
     arms.subject
     consumer.subject
@@ -46,14 +46,14 @@ in
       ];
     };
 
-    test-each-subject-names-its-own-proposition = {
+    test-each-subject-names-its-own-claim = {
       expr = builtins.length (
         builtins.attrNames (
           builtins.listToAttrs (
             map (p: {
               name = p;
               value = true;
-            }) verdict.propositions
+            }) verdict.claims
           )
         )
       );
@@ -68,7 +68,7 @@ in
     };
 
     # ★★ AND SO IS A TWO-SUBJECT ROSTER WITH ONE SEAM. This is the harder half: the roster LOOKS
-    # plural — two subjects, two propositions, two candidates — and is singular in the fact, which
+    # plural — two subjects, two claims, two candidates — and is singular in the fact, which
     # is exactly the shape of the defect being guarded. Counting subjects would pass it.
     test-control-two-subjects-sharing-a-seam-fail-the-guard = {
       expr =
@@ -77,7 +77,7 @@ in
           (gd.mkSubject {
             inherit (arms.subject) reference seam;
             candidate = consumer.subject.candidate;
-            proposition = "a different claim over the same substitution point";
+            claim = "a different claim over the same substitution point";
           })
         ]).ok;
       expected = false;

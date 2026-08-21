@@ -1,7 +1,7 @@
 # THE CONTRACT — the four records, each with a required-and-total field set.
 #
 # ★ EVERY CONSTRUCT NAME IN THIS FILE IS A PLACEHOLDER UNDER A STANDING QUARANTINE. `subject`,
-# `reference`, `candidate`, `seam`, `proposition`, `projections`, `comparison` and the divergence
+# `reference`, `candidate`, `seam`, `claim`, `projections`, `comparison` and the divergence
 # register are named by the specification of record and NOT by a verified primary. McKeeman 1998
 # grounds the MECHANISM (two comparable systems, one input, divergence as the signal) and the
 # reference/candidate ASYMMETRY, but grounds none of these identifiers; they resolve at their own
@@ -11,8 +11,8 @@
 # and a defaulted one makes that choice silently. The predecessor apparatus this library replaces
 # asserted a CONJUNCTION nobody had written down — that the re-host computes what the reference
 # computes, AND that the published grammar had not moved — so it went red on every deliberate
-# grammar change and could not say which conjunct a red belonged to. `proposition` is a required
-# field for exactly that reason: a red that cannot name its claim reproduces the defect under a new
+# grammar change and could not say which conjunct a red belonged to. `claim` is a required field for
+# exactly that reason: a red that cannot name what it asserts reproduces the defect under a new
 # name. `projections` is required and total for the same reason one level down — a comparison that
 # defaults its compared surface has decided what it measures without saying so.
 let
@@ -148,7 +148,7 @@ let
       reference,
       candidate,
       seam,
-      proposition,
+      claim,
     }:
     let
       # ★ ACCEPTANCE IS A BOUNDARY, NOT A FORMALITY. The same predicates the constructors apply,
@@ -175,8 +175,8 @@ let
         }
       ];
     in
-    if !(isNonEmptyString proposition) then
-      refuse "subject.proposition" "every assertion names the claim it belongs to; an unnamed claim is the conjunction defect"
+    if !(isNonEmptyString claim) then
+      refuse "subject.claim" "every assertion names the claim it belongs to; an unnamed claim is the conjunction defect"
     else if problems != [ ] then
       let
         f = builtins.head problems;
@@ -188,7 +188,7 @@ let
           reference
           candidate
           seam
-          proposition
+          claim
           ;
       };
 
@@ -212,7 +212,7 @@ let
 
   # The three arms a subject denotes. `reference` is the bare reference — it does NOT travel the
   # seam; `identity` is the same body that does. The pair is what makes "routing through the seam
-  # changes nothing" an assertable proposition rather than an assumption.
+  # changes nothing" an assertable claim rather than an assumption.
   armsOf = subject: {
     inherit (subject) reference candidate;
     identity = identityArm subject;

@@ -157,7 +157,7 @@ in
           subject = gd.mkSubject {
             reference = stub "REF";
             candidate = stub "CAND";
-            proposition = "p";
+            claim = "p";
             seam = gd.mkSeam {
               name = "s";
               install = body: "installed:${body}";

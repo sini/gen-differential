@@ -107,7 +107,7 @@ let
   subject = gd.mkSubject {
     inherit reference seam;
     candidate = install candidateBody;
-    proposition = "P1 · the pure merge engine computes what the reference module system computes on the shared grammar";
+    claim = "P1 · the pure merge engine computes what the reference module system computes on the shared grammar";
   };
 
   # THE FIXTURES THE CANDIDATE'S VOCABULARY ADMITS, selected by the registry's declared tier rather
