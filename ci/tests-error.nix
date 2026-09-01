@@ -9,21 +9,13 @@
 #   nix-unit --flake ./ci#tests        # the suites
 #   nix-unit --flake ./ci#testsError   # these cells
 {
-  lib,
   genDifferential,
-  genInputs,
   ...
 }:
 let
   gd = genDifferential;
 in
 {
-  options.flake.testsError = lib.mkOption {
-    type = lib.types.lazyAttrsOf (lib.types.lazyAttrsOf lib.types.raw);
-    default = { };
-    description = "Test suites whose cells' `expr` CAN ABORT: { suite.test = { expr; expected | expectedError; }; }. Read by `nix-unit --flake ./ci#testsError`; deliberately outside `flake.tests`, which the batch asserter forces every `expr` of and would crash on rather than fail.";
-  };
-
   config = {
     # ── THE CONTRACT'S REFUSALS ───────────────────────────────────────────────────────────────
     # Each cell drives one required-and-total field to its degenerate value and asserts the library
@@ -266,26 +258,5 @@ in
         expected = "ruled 2026-01-01";
       };
     };
-
-    perSystem =
-      { pkgs, system, ... }:
-      {
-        pre-commit.settings.hooks.ci-error = {
-          enable = true;
-          name = "ci-error";
-          description = "Run nix-unit error-assertion tests";
-          entry = "${
-            pkgs.writeShellApplication {
-              name = "gen-differential-ci-nix-unit-error";
-              runtimeInputs = [ genInputs.nix-unit.packages.${system}.default ];
-              text = ''
-                exec nix-unit --flake ./ci#testsError "$@"
-              '';
-            }
-          }/bin/gen-differential-ci-nix-unit-error";
-          files = "\\.nix$";
-          pass_filenames = false;
-        };
-      };
   };
 }
