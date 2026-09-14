@@ -46,6 +46,13 @@
       # behind `checks.default` forces every `expr` under `flake.tests`, so a refusal asserted there
       # would crash the gate instead of failing a cell. A contract whose refusals cannot be tested
       # for their own firing is a contract that refuses on paper.
-      extraModules = [ ./tests-error.nix ];
+      extraModules = [
+        ./tests-error.nix
+        # gen-differential is a TOOL, not an ecosystem library: it is absent from the register
+        # roster (`gen/lib/mkGenLibs.nix`), so no capability sheet is owed. Recorded as a
+        # declaration rather than left silent, so the absence reads as a decision
+        # (owner, 2026-09-14).
+        { gen.ci.agentsMd.sheet = "not-owed"; }
+      ];
     };
 }
