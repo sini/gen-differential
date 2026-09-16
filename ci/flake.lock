@@ -70,6 +70,17 @@
         "type": "github"
       }
     },
+    "gen-differential": {
+      "locked": {
+        "path": "..",
+        "type": "path"
+      },
+      "original": {
+        "path": "..",
+        "type": "path"
+      },
+      "parent": []
+    },
     "gen-harness": {
       "inputs": {
         "devshell": "devshell",
@@ -304,22 +315,11 @@
     },
     "root": {
       "inputs": {
+        "gen-differential": "gen-differential",
         "gen-harness": "gen-harness",
         "gen-merge": "gen-merge",
-        "nixpkgs": "nixpkgs_2",
-        "root": "root_2"
+        "nixpkgs": "nixpkgs_2"
       }
-    },
-    "root_2": {
-      "locked": {
-        "path": "..",
-        "type": "path"
-      },
-      "original": {
-        "path": "..",
-        "type": "path"
-      },
-      "parent": []
     },
     "treefmt-nix": {
       "inputs": {

@@ -1,7 +1,7 @@
 {
   inputs = {
     # The subject. `../lib` is dependency-free, so this is the only edge that carries it.
-    root.url = "path:..";
+    gen-differential.url = "path:..";
 
     gen-harness.url = "github:sini/gen-harness";
 
@@ -20,7 +20,7 @@
 
   outputs =
     inputs@{
-      root,
+      gen-differential,
       gen-harness,
       gen-merge,
       ...
@@ -30,7 +30,7 @@
       name = "gen-differential";
       testModules = ./tests;
       specialArgs = {
-        genDifferential = root.lib;
+        genDifferential = gen-differential.lib;
         genMerge = gen-merge.lib;
 
         # ★ ONE BINDING FOR THE REFERENCE ARM, AND HERE THAT IS LOAD-BEARING RATHER THAN TIDY. The
