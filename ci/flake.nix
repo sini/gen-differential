@@ -1,8 +1,5 @@
 {
   inputs = {
-    # The subject. `../lib` is dependency-free, so this is the only edge that carries it.
-    gen-differential.url = "path:..";
-
     gen-harness.url = "github:sini/gen-harness";
 
     # nixpkgs enters HERE AND ONLY HERE — the test plane. It is the REFERENCE ARM of this
@@ -20,7 +17,6 @@
 
   outputs =
     inputs@{
-      gen-differential,
       gen-harness,
       gen-merge,
       ...
@@ -30,7 +26,7 @@
       name = "gen-differential";
       testModules = ./tests;
       specialArgs = {
-        genDifferential = gen-differential.lib;
+        genDifferential = import ../lib;
         genMerge = gen-merge.lib;
 
         # ★ ONE BINDING FOR THE REFERENCE ARM, AND HERE THAT IS LOAD-BEARING RATHER THAN TIDY. The

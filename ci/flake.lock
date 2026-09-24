@@ -70,17 +70,6 @@
         "type": "github"
       }
     },
-    "gen-differential": {
-      "locked": {
-        "path": "..",
-        "type": "path"
-      },
-      "original": {
-        "path": "..",
-        "type": "path"
-      },
-      "parent": []
-    },
     "gen-graph": {
       "inputs": {
         "gen-prelude": "gen-prelude"
@@ -467,7 +456,6 @@
     },
     "root": {
       "inputs": {
-        "gen-differential": "gen-differential",
         "gen-harness": "gen-harness",
         "gen-merge": "gen-merge",
         "nixpkgs": "nixpkgs_2"
