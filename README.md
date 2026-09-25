@@ -304,9 +304,16 @@ cannot drift.
 ## Testing
 
 ```bash
-nix-unit --flake ./ci#tests        # the suites
-nix-unit --flake ./ci#testsError   # the contract's refusals
+nix develop ./ci --command ci                # the suites, guarded
+nix develop ./ci --command ci --tests-error  # the contract's refusals, guarded
+nix-unit --flake ./ci#tests        # the suites; unguarded
+nix-unit --flake ./ci#testsError   # the contract's refusals; unguarded
 ```
+
+`ci` refuses when anything under a declared read root is unknown to git — any extension or name,
+`_`-prefixed included — and the remedy is `git add` or a move. The bare `nix-unit --flake ./ci#tests`
+and `nix flake check ./ci` are unguarded: they read a git-filtered copy of the tree, so an untracked
+cell is silently absent and the run stays green.
 
 The refusals live on a **second output** because the batch asserter behind `checks.default` forces
 every `expr` under `flake.tests` unconditionally — a cell asserting a refusal there would crash the
