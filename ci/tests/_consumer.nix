@@ -88,7 +88,9 @@ let
   candidateBody = {
     name = "gen-merge";
     vocab = genMerge;
-    evalModules = genMerge.evalModuleTree;
+    # The seam speaks nixpkgs' one-record `evalModules` request; gen-merge's door takes its options
+    # first and the module list last (den-hoag-7gp66 P2), so the candidate arm splits the request.
+    evalModules = request: genMerge.evalModuleTree (removeAttrs request [ "modules" ]) request.modules;
   };
 
   seam = gd.mkSeam {
