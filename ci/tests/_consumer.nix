@@ -88,7 +88,7 @@ let
   candidateBody = {
     name = "gen-merge";
     vocab = genMerge;
-    evalModules = genMerge.evalModuleTree;
+    evalModules = r: genMerge.evalModuleTree (removeAttrs r [ "modules" ]) r.modules;
   };
 
   seam = gd.mkSeam {
