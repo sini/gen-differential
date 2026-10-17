@@ -1,7 +1,8 @@
 # The arms, the seam, and the subject this repository's own suites are taken on.
 #
 # Underscore-prefixed, so `import-tree` does not read it as a flake-parts module: it is a shared
-# definition the suites import, not a suite.
+# definition the suites import, not a suite. gen-merge's `ci/` also imports it by this path, for the
+# two-subject roster its `subjects.nix` guards, so its path and arguments are a consumer's surface.
 #
 # ★ THE REFERENCE IS AN ARGUMENT HERE TOO. nixpkgs is this plane's reference because the plane
 # chose it, not because the library knows about it — `../lib` has no inputs and no nixpkgs token.

@@ -7,18 +7,15 @@
     # (../lib) has no inputs at all and `tests/purity.nix` is the oracle for that.
     nixpkgs.url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.xz";
 
-    # THE FIRST CONSUMER, pinned on the test plane rather than by the library. The dependency points
-    # SUBJECT → INSTRUMENT in production: a consumer pins the harness and runs the differential in
-    # its own CI. Here the arrow is reversed once, deliberately, so this repository can demonstrate
-    # the instantiation it specifies without waiting for the consumer to adopt it — and it is
-    # reversed on the plane no consumer pins, so nothing downstream inherits the edge.
-    gen-merge.url = "github:sini/gen-merge";
+    # NO CONSUMER IS PINNED HERE. The dependency points SUBJECT → INSTRUMENT: the first consumer,
+    # gen-merge, pins this repository on its own test plane and runs the differential there
+    # (its `ci/tests/consumer.nix` and `subjects.nix`). Pinning it back would close a revision cycle
+    # across the two `ci/` planes (ADR-0037).
   };
 
   outputs =
     inputs@{
       gen-harness,
-      gen-merge,
       ...
     }:
     gen-harness.lib.mkCi {
@@ -27,7 +24,6 @@
       testModules = ./tests;
       specialArgs = {
         genDifferential = import ../lib;
-        genMerge = gen-merge.lib;
 
         # ★ ONE BINDING FOR THE REFERENCE ARM, AND HERE THAT IS LOAD-BEARING RATHER THAN TIDY. The
         # seam re-imports the reference's own module SOURCE against a re-extended fixpoint, so it
